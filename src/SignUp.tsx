@@ -71,13 +71,47 @@ const SignUp: React.FC = () => {
           required
           name="firstName"
           control={control}
+          rules={{
+            pattern: {
+              value: /^[\p{Letter}]+$/u,
+              message: "Invalid name",
+            },
+            maxLength: {
+              value: 25,
+              message: "Name too long",
+            },
+          }}
         />
-        <FieldInput label="Middle name" name="middleName" control={control} />
+        <FieldInput
+          label="Middle name"
+          name="middleName"
+          control={control}
+          rules={{
+            pattern: {
+              value: /^[\p{Letter}]+$/u,
+              message: "Invalid name",
+            },
+            maxLength: {
+              value: 25,
+              message: "Name too long",
+            },
+          }}
+        />
         <FieldInput
           label="Last name"
           required
           name="lastName"
           control={control}
+          rules={{
+            pattern: {
+              value: /^[\p{Letter}]+$/u,
+              message: "Invalid name",
+            },
+            maxLength: {
+              value: 25,
+              message: "Name too long",
+            },
+          }}
         />
       </FieldGroup>
       <FieldInput
