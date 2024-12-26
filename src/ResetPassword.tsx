@@ -57,6 +57,12 @@ const ResetPassword: React.FC = () => {
           type="password"
           name="password"
           control={control}
+          rules={{
+            minLength: {
+              value: 8,
+              message: "Password too short",
+            },
+          }}
         />
         <FieldInput
           label="Confirm password"
