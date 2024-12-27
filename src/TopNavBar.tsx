@@ -8,7 +8,7 @@ import {
 } from "@fluentui/react-components";
 import {
   Alert32Regular,
-  AppGeneric32Filled,
+  Apps32Filled,
   Search20Regular,
   Settings32Regular,
 } from "@fluentui/react-icons";
@@ -47,7 +47,7 @@ function TopNavBar() {
   const styles = useStyles();
   return (
     <div className={styles.root}>
-      <AppGeneric32Filled className={styles.title} />
+      <Apps32Filled className={styles.title} />
       <Title1 className={styles.title}>eUni</Title1>
       <div className={styles.inputContainer}>
         <Input

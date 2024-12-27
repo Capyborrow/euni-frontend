@@ -8,8 +8,9 @@ const useStyles = makeStyles({
 
     flexDirection: "column",
     gap: "1rem",
-    minHeight: "100vh",
     padding: "2rem",
+    width: "100%",
+    minHeight: "100vh",
   },
 });
 

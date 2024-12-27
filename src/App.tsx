@@ -4,6 +4,7 @@ import MainLayout from "./MainLayout";
 import AuthLayout from "./AuthLayout";
 import Home from "./Home";
 import NotFound from "./NotFound";
+import { makeStyles } from "@fluentui/react-components";
 
 const SignUp = lazy(() => import("./SignUp"));
 const SignIn = lazy(() => import("./SignIn"));
@@ -18,9 +19,17 @@ const ROUTES = {
   PASSWORD_RESET: "/password_reset",
 };
 
+const useStyles = makeStyles({
+  root: {
+    width: "100%",
+  },
+});
+
 function App() {
+  const styles = useStyles();
   return (
     <Suspense fallback={<div>Loading...</div>}>
+      <div className={styles.root}></div>
       <Routes>
         <Route element={<MainLayout />}>
           <Route path={ROUTES.HOME} element={<Home />} />
