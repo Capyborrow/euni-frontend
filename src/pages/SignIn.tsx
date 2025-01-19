@@ -13,7 +13,6 @@ const useStyles = makeStyles({
   },
 });
 
-//const LOGIN_URL = "/auth";
 interface SignInCredentials {
   email: string;
   password: string;
@@ -29,7 +28,7 @@ const SignIn: React.FC = () => {
   const onSubmit: SubmitHandler<SignInCredentials> = async (data) => {
     try {
       await axiosPrivate.post(
-        //LOGIN_URL,
+        "/auth",
         JSON.stringify({ identifier: data.email, password: data.password })
       );
       navigate(ROUTES.HOME);

@@ -33,7 +33,7 @@ const ForgotPassword: React.FC = () => {
 
   return (
     <AuthCard
-      title="Restore password"
+      title="Forgot password?"
       description={
         <Caption1>
           Enter your user account email and we will send you a password reset
@@ -47,7 +47,7 @@ const ForgotPassword: React.FC = () => {
           aria-label="Restore password"
           onClick={handleSubmit(onSubmit)}
         >
-          Restore password
+          Send reset link
         </Button>
       }
     >
