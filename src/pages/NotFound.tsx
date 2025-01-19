@@ -13,6 +13,7 @@ const useStyles = makeStyles({
     justifyContent: "center",
     alignItems: "center",
     height: "100vh",
+    gap: "0.5rem",
   },
   display: {
     color: tokens.colorBrandForeground2,

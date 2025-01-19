@@ -1,7 +1,5 @@
-// Reusable FieldInput Component with React Hook Form validation
 import { Field, Input } from "@fluentui/react-components";
 import { makeStyles, mergeClasses } from "@fluentui/react-components";
-import React from "react";
 import { useController, Control } from "react-hook-form";
 
 const useStyles = makeStyles({
@@ -31,10 +29,10 @@ interface FieldInputProps {
     | "datetime-local"
     | "month"
     | "week";
-  name: string; // Field name is required for React Hook Form
+  name: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  control: Control<any>; // React Hook Form control
-  rules?: object; // Validation rules for React Hook Form
+  control: Control<any>;
+  rules?: object;
   hint?: React.ReactNode;
   className?: string;
 }
@@ -51,12 +49,10 @@ const FieldInput: React.FC<FieldInputProps> = ({
 }) => {
   const styles = useStyles();
 
-  // Combine required validation if required is true
   const combinedRules = required
     ? { required: { value: true, message: "Required field" }, ...rules }
     : rules;
 
-  // Use React Hook Form's useController for field control
   const {
     field: { value, onChange, onBlur },
     fieldState: { error },
@@ -66,7 +62,6 @@ const FieldInput: React.FC<FieldInputProps> = ({
     rules: combinedRules,
   });
 
-  // Determine validation state based on errors
   const validationState = error ? "error" : undefined;
 
   return (

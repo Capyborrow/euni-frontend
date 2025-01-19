@@ -1,28 +1,34 @@
 import { Button, Caption1 } from "@fluentui/react-components";
 import { makeStyles } from "@fluentui/react-components";
-import AuthCard from "./AuthCard";
-import FieldInput from "./FieldInput";
+import AuthCard from "../components/AuthCard";
+import FieldInput from "../components/FieldInput";
 import { useForm, SubmitHandler } from "react-hook-form";
+import axiosPrivate from "../api/axios";
 
-// Styles
 const useStyles = makeStyles({
   button: {
     width: "100%",
   },
 });
 
-interface RestorePasswordCredentials {
+interface ForgotPasswordCredentials {
   email: string;
 }
 
-const RestorePassword: React.FC = () => {
+const ForgotPassword: React.FC = () => {
   const styles = useStyles();
-  const { control, handleSubmit } = useForm<RestorePasswordCredentials>({
+  const { control, handleSubmit } = useForm<ForgotPasswordCredentials>({
     mode: "onChange",
   });
 
-  const onSubmit: SubmitHandler<RestorePasswordCredentials> = (data) => {
+  const onSubmit: SubmitHandler<ForgotPasswordCredentials> = async (data) => {
     console.log("Restore Password Data:", data);
+    try {
+      await axiosPrivate.post("/restore", JSON.stringify({ data }));
+    } catch (err) {
+      console.error("Restore Password Error:", err);
+      return;
+    }
   };
 
   return (
@@ -62,4 +68,4 @@ const RestorePassword: React.FC = () => {
   );
 };
 
-export default RestorePassword;
+export default ForgotPassword;

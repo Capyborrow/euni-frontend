@@ -1,18 +1,18 @@
 import { Button, Caption1 } from "@fluentui/react-components";
 import { makeStyles } from "@fluentui/react-components";
-import AuthCard from "./AuthCard";
-import FieldInput from "./FieldInput";
-import FieldGroup from "./FieldGroup"; // Import FieldGroup Component
+import AuthCard from "../components/AuthCard";
+import FieldInput from "../components/FieldInput";
+import FieldGroup from "../components/FieldGroup";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import axiosPrivate from "../api/axios";
+import ROUTES from "../constants/routes";
 
-// Styles
 const useStyles = makeStyles({
   button: {
     width: "100%",
   },
 });
-
 interface ResetPasswordCredentials {
   password: string;
   confirmPassword: string;
@@ -20,17 +20,22 @@ interface ResetPasswordCredentials {
 
 const ResetPassword: React.FC = () => {
   const styles = useStyles();
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
   const { control, handleSubmit, watch } = useForm<ResetPasswordCredentials>({
     mode: "onChange",
   });
 
-  const onSubmit: SubmitHandler<ResetPasswordCredentials> = (data) => {
+  const onSubmit: SubmitHandler<ResetPasswordCredentials> = async (data) => {
     console.log("Reset Password Data:", data);
-    navigate("/signin");
+    try {
+      await axiosPrivate.post("/reset", JSON.stringify({ data }));
+      navigate(ROUTES.SIGN_IN);
+    } catch (err) {
+      console.error("Reset Password Error:", err);
+      return;
+    }
   };
 
-  // Watch the password field for validation
   const passwordValue = watch("password");
 
   return (

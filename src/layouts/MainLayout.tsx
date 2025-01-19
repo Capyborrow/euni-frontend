@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import TopNavBar from "./TopNavBar";
+import TopNavBar from "../components/TopNavBar";
 
 function MainLayout() {
   return (

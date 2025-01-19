@@ -20,7 +20,7 @@ const useStyles = makeStyles({
     backgroundColor: tokens.colorNeutralBackground1,
     boxShadow: tokens.shadow8,
     [`@media (max-width: 768px)`]: {
-      display: "none", // Hide on tablet and smaller
+      display: "none",
     },
   },
   rightContent: {

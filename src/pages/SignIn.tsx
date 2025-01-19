@@ -1,18 +1,19 @@
-// SignIn Component with React Hook Form Integration
 import { Button, Caption1 } from "@fluentui/react-components";
 import { Link, useNavigate } from "react-router-dom";
 import { makeStyles } from "@fluentui/react-components";
-import AuthCard from "./AuthCard";
-import FieldInput from "./FieldInput";
+import AuthCard from "../components/AuthCard";
+import FieldInput from "../components/FieldInput";
+import axiosPrivate from "../api/axios";
 import { useForm, SubmitHandler } from "react-hook-form";
+import ROUTES from "../constants/routes";
 
-// Styles
 const useStyles = makeStyles({
   button: {
     width: "100%",
   },
 });
 
+//const LOGIN_URL = "/auth";
 interface SignInCredentials {
   email: string;
   password: string;
@@ -20,13 +21,23 @@ interface SignInCredentials {
 
 const SignIn: React.FC = () => {
   const styles = useStyles();
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
   const { control, handleSubmit } = useForm<SignInCredentials>({
     mode: "onChange",
   });
 
-  const onSubmit: SubmitHandler<SignInCredentials> = (data) => {
-    console.log("Sign In Data:", data);
+  const onSubmit: SubmitHandler<SignInCredentials> = async (data) => {
+    try {
+      await axiosPrivate.post(
+        //LOGIN_URL,
+        JSON.stringify({ identifier: data.email, password: data.password })
+      );
+      navigate(ROUTES.HOME);
+    } catch (err) {
+      console.error("Sign In Error:", err);
+      return;
+    }
+
     navigate("/");
   };
 
@@ -35,7 +46,7 @@ const SignIn: React.FC = () => {
       title="Sign in"
       description={
         <Caption1>
-          Don't have an account yet? <Link to="/signup">Sign up</Link>
+          Don't have an account yet? <Link to={ROUTES.SIGN_UP}>Sign up</Link>
         </Caption1>
       }
       footer={
@@ -70,7 +81,8 @@ const SignIn: React.FC = () => {
         control={control}
         hint={
           <Caption1>
-            Forgot your password? <Link to="/password_restore">Restore</Link>
+            Forgot your password?{" "}
+            <Link to={ROUTES.FORGOT_PASSWORD}>Restore</Link>
           </Caption1>
         }
       />

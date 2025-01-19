@@ -31,8 +31,8 @@ const useStyles = makeStyles({
 interface AuthCardProps {
   title: string;
   description?: ReactNode;
-  children: ReactNode; // Body content
-  footer?: ReactNode; // Footer buttons or actions
+  children: ReactNode;
+  footer?: ReactNode;
 }
 
 const AuthCard: React.FC<AuthCardProps> = ({

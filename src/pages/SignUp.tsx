@@ -7,12 +7,13 @@ import {
 } from "@fluentui/react-components";
 import { Link, useNavigate } from "react-router-dom";
 import { makeStyles } from "@fluentui/react-components";
-import AuthCard from "./AuthCard";
-import FieldInput from "./FieldInput";
-import FieldGroup from "./FieldGroup";
+import AuthCard from "../components/AuthCard";
+import FieldInput from "../components/FieldInput";
+import FieldGroup from "../components/FieldGroup";
+import axiosPrivate from "../api/axios";
 import { useForm, SubmitHandler } from "react-hook-form";
+import ROUTES from "../constants/routes";
 
-// Styles
 const useStyles = makeStyles({
   button: {
     width: "100%",
@@ -31,19 +32,24 @@ interface SignUpCredentials {
 
 const SignUp: React.FC = () => {
   const styles = useStyles();
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
   const { control, handleSubmit, setValue, watch } = useForm<SignUpCredentials>(
     {
       mode: "onChange",
     }
   );
 
-  const role = watch("role", "student"); // Default to "student"
+  const role = watch("role", "student");
   const passwordValue = watch("password");
 
-  const onSubmit: SubmitHandler<SignUpCredentials> = (data) => {
-    console.log("Sign Up Data:", data);
-    navigate("/signin");
+  const onSubmit: SubmitHandler<SignUpCredentials> = async (data) => {
+    try {
+      await axiosPrivate.post("/register", JSON.stringify({ data }));
+      navigate(ROUTES.SIGN_IN);
+    } catch (err) {
+      console.error("Sign Up Error:", err);
+      return;
+    }
   };
 
   return (
@@ -51,7 +57,7 @@ const SignUp: React.FC = () => {
       title="Sign up"
       description={
         <Caption1>
-          Already have an account? <Link to="/signin">Sign in</Link>
+          Already have an account? <Link to={ROUTES.SIGN_IN}>Sign in</Link>
         </Caption1>
       }
       footer={
