@@ -12,6 +12,8 @@ import {
   Search20Regular,
   Settings32Regular,
 } from "@fluentui/react-icons";
+import { Link } from "react-router-dom";
+import ROUTES from "../constants/routes";
 
 const useStyles = makeStyles({
   root: {
@@ -41,14 +43,23 @@ const useStyles = makeStyles({
     flex: 1,
     maxWidth: "20rem",
   },
+  link: {
+    textDecoration: "none",
+    display: "flex",
+    alignItems: "center",
+    gap: ".5rem",
+  },
 });
 
 function TopNavBar() {
   const styles = useStyles();
   return (
     <div className={styles.root}>
-      <Apps32Filled className={styles.title} />
-      <Title1 className={styles.title}>eUni</Title1>
+      <Link className={styles.link} to={ROUTES.HOME}>
+        <Apps32Filled className={styles.title} />
+        <Title1 className={styles.title}>eUni</Title1>
+      </Link>
+
       <div className={styles.inputContainer}>
         <Input
           className={styles.input}
