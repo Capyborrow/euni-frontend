@@ -29,10 +29,10 @@ function App() {
       <div className={styles.root}></div>
       <Routes>
         <Route path={ROUTES.UNAUTHORIZED} element={<Unauthorized />} />
-        <Route element={<MainLayout />}>
-          <Route path={ROUTES.HOME} element={<Home />} />
-        </Route>
-        <Route element={<ProtectedRoute allowedRoles={[1]} />}>
+        <Route element={<ProtectedRoute allowedRoles={["student"]} />}>
+          <Route element={<MainLayout />}>
+            <Route path={ROUTES.HOME} element={<Home />} />
+          </Route>
           <Route element={<MainLayout />}>
             <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
           </Route>

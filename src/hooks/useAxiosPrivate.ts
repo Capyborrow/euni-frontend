@@ -28,6 +28,7 @@ const useAxiosPrivate = () => {
           prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
           return axiosPrivate(prevRequest);
         }
+        console.log("intercept");
         return Promise.reject(error);
       }
     );

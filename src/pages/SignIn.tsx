@@ -3,9 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { makeStyles } from "@fluentui/react-components";
 import AuthCard from "../components/AuthCard";
 import FieldInput from "../components/FieldInput";
-import axiosPrivate from "../api/axios";
 import { useForm, SubmitHandler } from "react-hook-form";
 import ROUTES from "../constants/routes";
+import axios from "../api/axios";
+import useAuth from "../hooks/useAuth";
+import { useEffect } from "react";
 
 const useStyles = makeStyles({
   button: {
@@ -21,16 +23,27 @@ interface SignInCredentials {
 const SignIn: React.FC = () => {
   const styles = useStyles();
   const navigate = useNavigate();
+  const { setAuth, auth } = useAuth();
   const { control, handleSubmit } = useForm<SignInCredentials>({
     mode: "onChange",
   });
 
+  useEffect(() => {
+    console.log("User:", auth?.user);
+  }, [auth]);
+
   const onSubmit: SubmitHandler<SignInCredentials> = async (data) => {
     try {
-      await axiosPrivate.post(
-        "/auth",
-        JSON.stringify({ identifier: data.email, password: data.password })
-      );
+      const response = await axios.post("/Auth/Login", JSON.stringify(data), {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
+
+      console.log(JSON.stringify(response?.data));
+      console.log(response.headers);
+      const accessToken = response?.data?.accessToken;
+      setAuth({ accessToken, user: data.email });
+      console.log("User:", auth?.user);
       navigate(ROUTES.HOME);
     } catch (err) {
       console.error("Sign In Error:", err);

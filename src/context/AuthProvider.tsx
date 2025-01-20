@@ -3,7 +3,6 @@ import { createContext, useState, ReactNode, FC } from "react";
 export interface AuthData {
   accessToken: string;
   user: string;
-  roles: number[];
 }
 
 export interface AuthContextType {

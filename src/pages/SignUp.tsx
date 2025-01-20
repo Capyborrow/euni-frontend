@@ -10,7 +10,7 @@ import { makeStyles } from "@fluentui/react-components";
 import AuthCard from "../components/AuthCard";
 import FieldInput from "../components/FieldInput";
 import FieldGroup from "../components/FieldGroup";
-import axiosPrivate from "../api/axios";
+import axios from "../api/axios";
 import { useForm, SubmitHandler } from "react-hook-form";
 import ROUTES from "../constants/routes";
 
@@ -26,7 +26,7 @@ interface SignUpCredentials {
   lastName: string;
   email: string;
   password: string;
-  confirmPassword: string;
+  confirmPassword?: string;
   role: string;
 }
 
@@ -36,15 +36,34 @@ const SignUp: React.FC = () => {
   const { control, handleSubmit, setValue, watch } = useForm<SignUpCredentials>(
     {
       mode: "onChange",
+      defaultValues: {
+        firstName: "",
+        middleName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        role: "student",
+      },
     }
   );
 
   const role = watch("role", "student");
-  const passwordValue = watch("password");
 
   const onSubmit: SubmitHandler<SignUpCredentials> = async (data) => {
     try {
-      await axiosPrivate.post("/register", JSON.stringify({ data }));
+      const signupData = { ...data };
+      delete signupData.confirmPassword;
+      console.log(JSON.stringify(signupData));
+      const response = await axios.post(
+        "/Auth/Register",
+        JSON.stringify(signupData),
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+      console.log(JSON.stringify(response?.data));
       navigate(ROUTES.SIGN_IN);
     } catch (err) {
       console.error("Sign Up Error:", err);
@@ -155,7 +174,7 @@ const SignUp: React.FC = () => {
           control={control}
           rules={{
             validate: (value: string) =>
-              value === passwordValue || "Passwords do not match",
+              value === watch("password") || "Passwords do not match",
           }}
         />
       </FieldGroup>
@@ -166,7 +185,7 @@ const SignUp: React.FC = () => {
           onChange={(_e, data) => setValue("role", data.value)}
         >
           <Radio value="student" label="Student" />
-          <Radio value="educator" label="Educator" />
+          <Radio value="teacher" label="Teacher" />
         </RadioGroup>
       </Field>
     </AuthCard>
