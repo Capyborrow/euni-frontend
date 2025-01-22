@@ -7,7 +7,6 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import ROUTES from "../constants/routes";
 import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
-import { useEffect } from "react";
 
 const useStyles = makeStyles({
   button: {
@@ -23,14 +22,10 @@ interface SignInCredentials {
 const SignIn: React.FC = () => {
   const styles = useStyles();
   const navigate = useNavigate();
-  const { setAuth, auth } = useAuth();
+  const { setAuth } = useAuth();
   const { control, handleSubmit } = useForm<SignInCredentials>({
     mode: "onChange",
   });
-
-  useEffect(() => {
-    console.log("User:", auth?.user);
-  }, [auth]);
 
   const onSubmit: SubmitHandler<SignInCredentials> = async (data) => {
     try {
@@ -43,7 +38,6 @@ const SignIn: React.FC = () => {
       console.log(response.headers);
       const accessToken = response?.data?.accessToken;
       setAuth({ accessToken, user: data.email });
-      console.log("User:", auth?.user);
       navigate(ROUTES.HOME);
     } catch (err) {
       console.error("Sign In Error:", err);

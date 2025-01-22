@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
-import { makeStyles, tokens } from "@fluentui/react-components";
+import { Button, makeStyles, tokens } from "@fluentui/react-components";
 import LessonCard from "../components/LessonCard";
+import useRefreshToken from "../hooks/useRefreshToken";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 const useStyles = makeStyles({
   root: {
@@ -16,6 +18,15 @@ const useStyles = makeStyles({
 });
 
 function Home() {
+  const refresh = useRefreshToken();
+  const axiosPrivate = useAxiosPrivate();
+
+  const test = async () => {
+    console.log("test");
+    const response = await axiosPrivate.get("/Student");
+    console.log(response.data);
+  };
+
   const styles = useStyles();
   return (
     <div className={styles.root}>
@@ -31,6 +42,12 @@ function Home() {
         maxPoints={10}
         location="228"
       ></LessonCard>
+      <Button appearance="primary" onClick={refresh}>
+        Refresh
+      </Button>
+      <Button appearance="primary" onClick={test}>
+        Test
+      </Button>
     </div>
   );
 }

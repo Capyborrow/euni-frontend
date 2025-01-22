@@ -29,7 +29,9 @@ function App() {
       <div className={styles.root}></div>
       <Routes>
         <Route path={ROUTES.UNAUTHORIZED} element={<Unauthorized />} />
-        <Route element={<ProtectedRoute allowedRoles={["student"]} />}>
+        <Route
+          element={<ProtectedRoute allowedRoles={["student", "teacher"]} />}
+        >
           <Route element={<MainLayout />}>
             <Route path={ROUTES.HOME} element={<Home />} />
           </Route>

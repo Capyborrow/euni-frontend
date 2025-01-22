@@ -6,9 +6,13 @@ const useRefreshToken = () => {
   const { setAuth } = useAuth();
 
   const refresh = async () => {
-    const response = await axios.get("/Auth/Refresh", {
-      withCredentials: true,
-    });
+    const response = await axios.post(
+      "/Auth/Refresh",
+      {},
+      {
+        withCredentials: true,
+      }
+    );
     console.log("New Token:", response.data.accessToken);
     setAuth((prev: AuthData | null) => {
       return {
