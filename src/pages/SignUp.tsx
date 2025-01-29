@@ -54,19 +54,13 @@ const SignUp: React.FC = () => {
     try {
       const signupData = { ...data };
       delete signupData.confirmPassword;
-      console.log(JSON.stringify(signupData));
-      const response = await axios.post(
-        "/Auth/Register",
-        JSON.stringify(signupData),
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
-      console.log(JSON.stringify(response?.data));
+      await axios.post("/Auth/Register", JSON.stringify(signupData), {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
       navigate(ROUTES.SIGN_IN);
     } catch (err) {
-      console.error("Sign Up Error:", err);
+      console.error(err);
       return;
     }
   };

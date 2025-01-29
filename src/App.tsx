@@ -10,6 +10,7 @@ import AuthLayout from "./layouts/AuthLayout";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Loading from "./pages/Loading";
+import PersistLogin from "./components/PersistLogin";
 
 const SignUp = lazy(() => import("./pages/SignUp"));
 const SignIn = lazy(() => import("./pages/SignIn"));
@@ -29,14 +30,18 @@ function App() {
       <div className={styles.root}></div>
       <Routes>
         <Route path={ROUTES.UNAUTHORIZED} element={<Unauthorized />} />
-        <Route
-          element={<ProtectedRoute allowedRoles={["student", "teacher"]} />}
-        >
-          <Route element={<MainLayout />}>
-            <Route path={ROUTES.HOME} element={<Home />} />
+        <Route element={<PersistLogin />}>
+          <Route
+            element={<ProtectedRoute allowedRoles={["student", "teacher"]} />}
+          >
+            <Route element={<MainLayout />}>
+              <Route path={ROUTES.HOME} element={<Home />} />
+            </Route>
           </Route>
-          <Route element={<MainLayout />}>
-            <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
+          <Route element={<ProtectedRoute allowedRoles={["teacher"]} />}>
+            <Route element={<MainLayout />}>
+              <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
+            </Route>
           </Route>
         </Route>
 
