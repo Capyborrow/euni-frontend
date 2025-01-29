@@ -3,7 +3,7 @@ import { makeStyles } from "@fluentui/react-components";
 import AuthCard from "../components/AuthCard";
 import FieldInput from "../components/FieldInput";
 import { useForm, SubmitHandler } from "react-hook-form";
-import axiosPrivate from "../api/axios";
+import axios from "../api/axios";
 
 const useStyles = makeStyles({
   button: {
@@ -22,9 +22,11 @@ const ForgotPassword: React.FC = () => {
   });
 
   const onSubmit: SubmitHandler<ForgotPasswordCredentials> = async (data) => {
-    console.log("Restore Password Data:", data);
     try {
-      await axiosPrivate.post("/restore", JSON.stringify({ data }));
+      await axios.post("/Auth/ForgotPassword", JSON.stringify(data), {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
     } catch (err) {
       console.error("Restore Password Error:", err);
       return;

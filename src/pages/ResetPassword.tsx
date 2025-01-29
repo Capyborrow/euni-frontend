@@ -5,8 +5,13 @@ import FieldInput from "../components/FieldInput";
 import FieldGroup from "../components/FieldGroup";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import axiosPrivate from "../api/axios";
+import axios from "../api/axios";
 import ROUTES from "../constants/routes";
+import { useLocation } from "react-router-dom";
+
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 
 const useStyles = makeStyles({
   button: {
@@ -15,10 +20,13 @@ const useStyles = makeStyles({
 });
 interface ResetPasswordCredentials {
   password: string;
-  confirmPassword: string;
+  confirmPassword?: string;
 }
 
 const ResetPassword: React.FC = () => {
+  const query = useQuery();
+  const email = query.get("email");
+  const token = query.get("token");
   const styles = useStyles();
   const navigate = useNavigate();
   const { control, handleSubmit, watch } = useForm<ResetPasswordCredentials>({
@@ -26,9 +34,15 @@ const ResetPassword: React.FC = () => {
   });
 
   const onSubmit: SubmitHandler<ResetPasswordCredentials> = async (data) => {
-    console.log("Reset Password Data:", data);
     try {
-      await axiosPrivate.post("/reset", JSON.stringify({ data }));
+      await axios.post(
+        "/Auth/ResetPassword",
+        JSON.stringify({ email, token, newPassword: data.password }),
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
       navigate(ROUTES.SIGN_IN);
     } catch (err) {
       console.error("Reset Password Error:", err);

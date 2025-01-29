@@ -1,4 +1,4 @@
-import { Button, Caption1 } from "@fluentui/react-components";
+import { Button, Caption1, Checkbox } from "@fluentui/react-components";
 import { Link, useNavigate } from "react-router-dom";
 import { makeStyles } from "@fluentui/react-components";
 import AuthCard from "../components/AuthCard";
@@ -7,6 +7,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import ROUTES from "../constants/routes";
 import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
+import { useEffect } from "react";
 
 const useStyles = makeStyles({
   button: {
@@ -22,7 +23,7 @@ interface SignInCredentials {
 const SignIn: React.FC = () => {
   const styles = useStyles();
   const navigate = useNavigate();
-  const { setAuth } = useAuth();
+  const { setAuth, persist, setPersist } = useAuth();
   const { control, handleSubmit } = useForm<SignInCredentials>({
     mode: "onChange",
   });
@@ -33,19 +34,28 @@ const SignIn: React.FC = () => {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
-
-      console.log(JSON.stringify(response?.data));
-      console.log(response.headers);
       const accessToken = response?.data?.accessToken;
-      setAuth({ accessToken, user: data.email });
+
+      setAuth({
+        accessToken,
+        email: data.email,
+      });
       navigate(ROUTES.HOME);
     } catch (err) {
-      console.error("Sign In Error:", err);
+      console.error(err);
       return;
     }
 
     navigate("/");
   };
+
+  const togglePersist = () => {
+    setPersist((prev) => !prev);
+  };
+
+  useEffect(() => {
+    localStorage.setItem("persist", persist.toString());
+  }, [persist]);
 
   return (
     <AuthCard
@@ -91,6 +101,11 @@ const SignIn: React.FC = () => {
             <Link to={ROUTES.FORGOT_PASSWORD}>Restore</Link>
           </Caption1>
         }
+      />
+      <Checkbox
+        label="Remember me"
+        onChange={togglePersist}
+        checked={persist}
       />
     </AuthCard>
   );

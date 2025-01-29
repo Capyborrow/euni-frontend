@@ -7,26 +7,23 @@ interface ProtectedRouteProps {
   allowedRoles: string[];
 }
 
+interface DecodedToken {
+  role: string;
+}
+
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
   const { auth } = useAuth();
   const location = useLocation();
 
-  interface DecodedToken {
-    email: string;
-    role: string;
-  }
-
-  const decoded: DecodedToken | undefined = auth?.accessToken
+  const decoded = auth?.accessToken
     ? jwtDecode<DecodedToken>(auth.accessToken)
-    : undefined;
+    : null;
 
-  const role = decoded?.role ?? "";
-  console.log("Decoded:", decoded);
-  console.log("Allowed Roles:", allowedRoles);
+  const role = decoded?.role || "";
 
   return allowedRoles.includes(role) ? (
     <Outlet />
-  ) : auth?.user ? (
+  ) : auth?.email ? (
     <Navigate to={ROUTES.UNAUTHORIZED} state={{ from: location }} replace />
   ) : (
     <Navigate to={ROUTES.SIGN_IN} state={{ from: location }} replace />

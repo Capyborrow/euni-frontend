@@ -3,6 +3,7 @@ import { Button, makeStyles, tokens } from "@fluentui/react-components";
 import LessonCard from "../components/LessonCard";
 import useRefreshToken from "../hooks/useRefreshToken";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import useAuth from "../hooks/useAuth";
 
 const useStyles = makeStyles({
   root: {
@@ -20,11 +21,26 @@ const useStyles = makeStyles({
 function Home() {
   const refresh = useRefreshToken();
   const axiosPrivate = useAxiosPrivate();
+  const { setAuth } = useAuth();
 
   const test = async () => {
     console.log("test");
     const response = await axiosPrivate.get("/Student");
     console.log(response.data);
+  };
+
+  const logout = async () => {
+    try {
+      const response = await axiosPrivate.post(
+        "/Auth/Logout",
+        {},
+        { withCredentials: true }
+      );
+      console.log("Logout Response:", response.data);
+      setAuth({ accessToken: "", email: "" });
+    } catch (err) {
+      console.error("Logout Error:", err);
+    }
   };
 
   const styles = useStyles();
@@ -47,6 +63,9 @@ function Home() {
       </Button>
       <Button appearance="primary" onClick={test}>
         Test
+      </Button>
+      <Button appearance="primary" onClick={logout}>
+        Logout
       </Button>
     </div>
   );
