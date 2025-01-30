@@ -21,7 +21,7 @@ const useStyles = makeStyles({
 function Home() {
   const refresh = useRefreshToken();
   const axiosPrivate = useAxiosPrivate();
-  const { setAuth } = useAuth();
+  const { setAuth, auth } = useAuth();
 
   const test = async () => {
     console.log("test");
@@ -40,6 +40,19 @@ function Home() {
       setAuth({ accessToken: "", email: "" });
     } catch (err) {
       console.error("Logout Error:", err);
+    }
+  };
+
+  const confirmEmail = async () => {
+    try {
+      const response = await axiosPrivate.post(
+        "/Auth/ResendConfirmationEmail",
+        { email: auth?.email },
+        { withCredentials: true }
+      );
+      console.log("Confirm Email Response:", response.data);
+    } catch (err) {
+      console.error("Confirm Email Error:", err);
     }
   };
 
@@ -66,6 +79,9 @@ function Home() {
       </Button>
       <Button appearance="primary" onClick={logout}>
         Logout
+      </Button>
+      <Button appearance="primary" onClick={confirmEmail}>
+        ConfirmEmail
       </Button>
     </div>
   );

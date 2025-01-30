@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Loading from "./pages/Loading";
 import PersistLogin from "./components/PersistLogin";
+import ConfirmEmail from "./pages/ConfirmEmail";
 
 const SignUp = lazy(() => import("./pages/SignUp"));
 const SignIn = lazy(() => import("./pages/SignIn"));
@@ -45,6 +46,7 @@ function App() {
           </Route>
         </Route>
 
+        <Route path={ROUTES.CONFIRM_EMAIL} element={<ConfirmEmail />} />
         <Route element={<AuthLayout />}>
           <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
           <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
