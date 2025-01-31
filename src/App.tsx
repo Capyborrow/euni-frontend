@@ -8,6 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import MainLayout from "./layouts/MainLayout";
 import AuthLayout from "./layouts/AuthLayout";
 import Home from "./pages/Home";
+import Profile from "./pages/Profile";
 import Dashboard from "./pages/Dashboard";
 import Loading from "./pages/Loading";
 import PersistLogin from "./components/PersistLogin";
@@ -37,6 +38,7 @@ function App() {
           >
             <Route element={<MainLayout />}>
               <Route path={ROUTES.HOME} element={<Home />} />
+              <Route path={ROUTES.PROFILE} element={<Profile />} />
             </Route>
           </Route>
           <Route element={<ProtectedRoute allowedRoles={["teacher"]} />}>

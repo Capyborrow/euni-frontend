@@ -12,7 +12,7 @@ import {
   Search20Regular,
   Settings32Regular,
 } from "@fluentui/react-icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ROUTES from "../constants/routes";
 
 const useStyles = makeStyles({
@@ -53,6 +53,7 @@ const useStyles = makeStyles({
 
 function TopNavBar() {
   const styles = useStyles();
+  const navigate = useNavigate();
   return (
     <div className={styles.root}>
       <Link className={styles.link} to={ROUTES.HOME}>
@@ -70,7 +71,7 @@ function TopNavBar() {
       </div>
       <Button icon={<Alert32Regular />} appearance="subtle" size="large" />
       <Button icon={<Settings32Regular />} appearance="subtle" size="large" />
-      <Button icon={<Avatar />} appearance="transparent" size="large" />
+      <Button icon={<Avatar />} appearance="transparent" size="large" onClick={()=>navigate(ROUTES.PROFILE)}/>
     </div>
   );
 }
