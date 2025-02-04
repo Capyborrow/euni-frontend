@@ -21,6 +21,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
 
   const role = decoded?.role || "";
 
+  console.log("Role: ", role);
+  console.log("Allowed Roles: ", allowedRoles);
+  console.log("Email: ", auth?.email);
+
   return allowedRoles.includes(role) ? (
     <Outlet />
   ) : auth?.email ? (

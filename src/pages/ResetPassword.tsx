@@ -1,53 +1,57 @@
-import { Button, Caption1 } from "@fluentui/react-components";
-import { makeStyles } from "@fluentui/react-components";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { Caption1 } from "@fluentui/react-components";
 import AuthCard from "../components/AuthCard";
 import FieldInput from "../components/FieldInput";
 import FieldGroup from "../components/FieldGroup";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import axios from "../api/axios";
+import useSubmit from "../hooks/useSubmit";
 import ROUTES from "../constants/routes";
 import { useLocation } from "react-router-dom";
+import AuthCardFooter from "../components/AuthCardFooter";
+import useFeedback from "../hooks/useFeedback";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
-const useStyles = makeStyles({
-  button: {
-    width: "100%",
-  },
-});
 interface ResetPasswordCredentials {
   password: string;
   confirmPassword?: string;
+}
+
+interface ResetPasswordResponse {
+  message: string;
 }
 
 const ResetPassword: React.FC = () => {
   const query = useQuery();
   const email = query.get("email");
   const token = query.get("token");
-  const styles = useStyles();
-  const navigate = useNavigate();
   const { control, handleSubmit, watch } = useForm<ResetPasswordCredentials>({
     mode: "onChange",
   });
 
-  const onSubmit: SubmitHandler<ResetPasswordCredentials> = async (data) => {
-    try {
-      await axios.post(
-        "/Auth/ResetPassword",
-        JSON.stringify({ email, token, newPassword: data.password }),
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
-      navigate(ROUTES.SIGN_IN);
-    } catch (err) {
-      console.error("Reset Password Error:", err);
-      return;
-    }
+  const { submit, loading } = useSubmit();
+
+  const { feedback, setFeedback } = useFeedback();
+
+  const onSubmit: SubmitHandler<ResetPasswordCredentials> = (data) => {
+    submit<ResetPasswordResponse>({
+      url: "/Auth/ResetPassword",
+      data: { email, token, newPassword: data.password },
+      redirect: ROUTES.SIGN_IN,
+      onSuccess: () => {
+        setFeedback({
+          message: "Password reset successfully.",
+          intent: "success",
+        });
+      },
+      onError: (message) => {
+        setFeedback({
+          message: message || "Failed to reset password. Please try again.",
+          intent: "error",
+        });
+      },
+    });
   };
 
   const passwordValue = watch("password");
@@ -59,14 +63,14 @@ const ResetPassword: React.FC = () => {
         <Caption1>Come up with a new password for your account</Caption1>
       }
       footer={
-        <Button
-          appearance="primary"
-          className={styles.button}
-          aria-label="Reset password"
-          onClick={handleSubmit(onSubmit)}
-        >
-          Reset password
-        </Button>
+        <AuthCardFooter
+          message={feedback?.message} // Unified message
+          intent={feedback?.intent} // Unified intent
+          loading={loading}
+          handleSubmit={handleSubmit(onSubmit)}
+          buttonText="Reset password"
+          loadingText="Resetting password"
+        />
       }
     >
       <FieldGroup>

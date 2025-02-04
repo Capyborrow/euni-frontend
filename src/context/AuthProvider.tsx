@@ -9,11 +9,7 @@ export interface AuthContextType {
   auth: AuthData | null;
   setAuth: React.Dispatch<React.SetStateAction<AuthData | null>>;
   persist: boolean;
-  setPersist: React.Dispatch<React.SetStateAction<boolean>>;
-  handlePersistChange: (
-    event: React.FormEvent<HTMLInputElement>,
-    checked?: boolean
-  ) => void;
+  togglePersist: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -28,16 +24,14 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     return localStorage.getItem("persist") === "true";
   });
 
-  const handlePersistChange = (
-    _: React.FormEvent<HTMLInputElement>,
-    checked?: boolean
-  ) => {
-    setPersist(!!checked);
+  const togglePersist = () => {
+    const newPersist = !persist;
+    setPersist(newPersist);
+    localStorage.setItem("persist", newPersist ? "true" : "false");
   };
+
   return (
-    <AuthContext.Provider
-      value={{ auth, setAuth, persist, setPersist, handlePersistChange }}
-    >
+    <AuthContext.Provider value={{ auth, setAuth, persist, togglePersist }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,36 +1,46 @@
-import { Button, Caption1 } from "@fluentui/react-components";
-import { makeStyles } from "@fluentui/react-components";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { Caption1 } from "@fluentui/react-components";
 import AuthCard from "../components/AuthCard";
 import FieldInput from "../components/FieldInput";
-import { useForm, SubmitHandler } from "react-hook-form";
-import axios from "../api/axios";
-
-const useStyles = makeStyles({
-  button: {
-    width: "100%",
-  },
-});
+import useSubmit from "../hooks/useSubmit";
+import AuthCardFooter from "../components/AuthCardFooter";
+import useFeedback from "../hooks/useFeedback";
 
 interface ForgotPasswordCredentials {
   email: string;
 }
 
+interface ForgotPasswordResponse {
+  message: string;
+}
+
 const ForgotPassword: React.FC = () => {
-  const styles = useStyles();
   const { control, handleSubmit } = useForm<ForgotPasswordCredentials>({
     mode: "onChange",
   });
 
-  const onSubmit: SubmitHandler<ForgotPasswordCredentials> = async (data) => {
-    try {
-      await axios.post("/Auth/ForgotPassword", JSON.stringify(data), {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      });
-    } catch (err) {
-      console.error("Restore Password Error:", err);
-      return;
-    }
+  const { submit, loading } = useSubmit();
+
+  const { feedback, setFeedback } = useFeedback();
+
+  const onSubmit: SubmitHandler<ForgotPasswordCredentials> = (data) => {
+    submit<ForgotPasswordResponse>({
+      url: "/Auth/ForgotPassword",
+      data,
+      onSuccess: () => {
+        setFeedback({
+          message: "Password reset link sent. Please check your email.",
+          intent: "success",
+        });
+      },
+      onError: (message) => {
+        setFeedback({
+          message:
+            message || "Failed to send password reset link. Please try again.",
+          intent: "error",
+        });
+      },
+    });
   };
 
   return (
@@ -38,19 +48,18 @@ const ForgotPassword: React.FC = () => {
       title="Forgot password?"
       description={
         <Caption1>
-          Enter your user account email and we will send you a password reset
-          link
+          Enter your email, and we'll send you a password reset link.
         </Caption1>
       }
       footer={
-        <Button
-          appearance="primary"
-          className={styles.button}
-          aria-label="Restore password"
-          onClick={handleSubmit(onSubmit)}
-        >
-          Send reset link
-        </Button>
+        <AuthCardFooter
+          message={feedback?.message} // Unified message
+          intent={feedback?.intent} // Unified intent
+          loading={loading}
+          handleSubmit={handleSubmit(onSubmit)}
+          buttonText="Send reset link"
+          loadingText="Sending reset link"
+        />
       }
     >
       <FieldInput
@@ -61,7 +70,7 @@ const ForgotPassword: React.FC = () => {
         control={control}
         rules={{
           pattern: {
-            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // Improved regex
             message: "Invalid email address",
           },
         }}

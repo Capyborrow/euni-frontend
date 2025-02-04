@@ -12,9 +12,10 @@ import Dashboard from "./pages/Dashboard";
 import Loading from "./pages/Loading";
 import PersistLogin from "./components/PersistLogin";
 import ConfirmEmail from "./pages/ConfirmEmail";
+import ConfirmEmailStatus from "./pages/ConfirmEmailStatus";
 
-const SignUp = lazy(() => import("./pages/SignUp"));
-const SignIn = lazy(() => import("./pages/SignIn"));
+const SignUp = lazy(() => import("./pages/Register"));
+const SignIn = lazy(() => import("./pages/Login"));
 const RestorePassword = lazy(() => import("./pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 
@@ -46,9 +47,13 @@ function App() {
           </Route>
         </Route>
 
-        <Route path={ROUTES.CONFIRM_EMAIL} element={<ConfirmEmail />} />
+        <Route
+          path={ROUTES.CONFIRM_EMAIL_STATUS}
+          element={<ConfirmEmailStatus />}
+        />
         <Route element={<AuthLayout />}>
           <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
+          <Route path={ROUTES.CONFIRM_EMAIL} element={<ConfirmEmail />} />
           <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
           <Route path={ROUTES.FORGOT_PASSWORD} element={<RestorePassword />} />
           <Route path={ROUTES.RESET_PASSWORD} element={<ResetPassword />} />

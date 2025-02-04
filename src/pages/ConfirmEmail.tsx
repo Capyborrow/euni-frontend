@@ -1,79 +1,93 @@
+import { Link, useNavigate } from "react-router-dom";
+import ROUTES from "../constants/routes";
+import { Caption1 } from "@fluentui/react-components";
+import AuthCard from "../components/AuthCard";
+import useSubmit from "../hooks/useSubmit";
+import AuthCardFooter from "../components/AuthCardFooter";
+import useFeedback from "../hooks/useFeedback";
+import { useEffect } from "react";
 import axios from "../api/axios";
-import { useState, useMemo } from "react";
-import { useLocation } from "react-router-dom";
-import {
-  Button,
-  Caption1,
-  Display,
-  LargeTitle,
-  makeStyles,
-  tokens,
-} from "@fluentui/react-components";
 
-const useStyles = makeStyles({
-  root: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh",
-    gap: "0.5rem",
-  },
-  display: {
-    color: tokens.colorBrandForeground2,
-  },
-});
+const ConfirmEmail: React.FC = () => {
+  const navigate = useNavigate();
 
-function useQuery() {
-  const location = useLocation();
-  return useMemo(() => new URLSearchParams(location.search), [location]);
-}
+  const { submit, loading } = useSubmit();
 
-const ConfirmEmail = () => {
-  const [success, setSuccess] = useState<boolean | null>(null);
-  const query = useQuery();
-  const styles = useStyles();
+  const { feedback, setFeedback } = useFeedback();
 
-  const handleConfirmEmail = () => {
-    const email = query.get("email");
-    const token = query.get("token");
+  const registeredEmail = sessionStorage.getItem("registeredEmail") || "";
 
-    if (email && token) {
-      axios
-        .post("/Auth/ConfirmEmail", JSON.stringify({ email, token }), {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        })
-        .then(() => {
-          setSuccess(true);
-        })
-        .catch((err) => {
-          console.error("Confirm Email Error:", err);
-          setSuccess(false);
+  useEffect(() => {
+    if (!registeredEmail) return;
+
+    const checkEmailConfirmation = async () => {
+      try {
+        const response = await axios.post(
+          "/Auth/CheckEmailConfirmation",
+          JSON.stringify({ email: registeredEmail }),
+          { headers: { "Content-Type": "application/json" } }
+        );
+        if (response.data?.confirmed) {
+          sessionStorage.removeItem("registeredEmail");
+          navigate(ROUTES.SIGN_IN);
+        }
+      } catch (error) {
+        console.error("Error checking email confirmation:", error);
+      }
+    };
+
+    const interval = setInterval(checkEmailConfirmation, 10000);
+
+    return () => clearInterval(interval);
+  }, [navigate, registeredEmail]);
+
+  const onSubmit = async () => {
+    if (!registeredEmail) return;
+
+    submit({
+      url: "/Auth/ResendConfirmationEmail",
+      data: { email: registeredEmail },
+      onSuccess: () => {
+        setFeedback({
+          message: "Confirmation link sent. Please check your email.",
+          intent: "success",
         });
-    } else {
-      setSuccess(false);
-    }
+      },
+      onError: (message) => {
+        setFeedback({
+          message:
+            message || "Failed to send confirmation link. Please try again.",
+          intent: "error",
+        });
+      },
+    });
   };
 
   return (
-    <div className={styles.root}>
-      {success === null ? (
-        <Button onClick={handleConfirmEmail}>Confirm Email</Button>
-      ) : success ? (
-        <>
-          <Display className={styles.display}>Success</Display>
-          <LargeTitle>Email verified</LargeTitle>
-          <Caption1>You may now close this tab</Caption1>
-        </>
-      ) : (
-        <>
-          <Display className={styles.display}>Failed</Display>
-          <LargeTitle>Couldn't verify your email</LargeTitle>
-          <Caption1>Please try again later or contact support</Caption1>
-        </>
-      )}
-    </div>
+    <AuthCard
+      title="Confirm Email"
+      description={
+        <Caption1>
+          Have already confirmed your email?{" "}
+          <Link to={ROUTES.SIGN_IN}>Sign in</Link>
+        </Caption1>
+      }
+      footer={
+        <AuthCardFooter
+          message={feedback?.message}
+          intent={feedback?.intent} // Unified intent
+          loading={loading}
+          handleSubmit={onSubmit}
+          buttonText="Resend confirmation link"
+          loadingText="Resending confirmation link"
+        />
+      }
+    >
+      <Caption1>
+        We've sent a confirmation link to <strong>{registeredEmail}</strong>.
+        Please check your email.
+      </Caption1>
+    </AuthCard>
   );
 };
 

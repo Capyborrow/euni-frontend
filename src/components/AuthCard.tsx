@@ -31,7 +31,7 @@ const useStyles = makeStyles({
 interface AuthCardProps {
   title: string;
   description?: ReactNode;
-  children: ReactNode;
+  children?: ReactNode;
   footer?: ReactNode;
 }
 

@@ -1,6 +1,7 @@
 import axios from "../api/axios";
 import useAuth from "./useAuth";
 import { AuthData } from "../context/AuthProvider";
+import { jwtDecode } from "jwt-decode";
 
 const useRefreshToken = () => {
   const { setAuth } = useAuth();
@@ -18,7 +19,9 @@ const useRefreshToken = () => {
       return {
         ...prev,
         accessToken: response.data.accessToken,
-        email: prev?.email || "",
+        email:
+          prev?.email ||
+          jwtDecode<{ email: string }>(response.data.accessToken).email,
       };
     });
     return response.data.accessToken;

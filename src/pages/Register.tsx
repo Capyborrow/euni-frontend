@@ -1,26 +1,15 @@
-import {
-  Button,
-  Caption1,
-  RadioGroup,
-  Radio,
-  Field,
-} from "@fluentui/react-components";
-import { Link, useNavigate } from "react-router-dom";
-import { makeStyles } from "@fluentui/react-components";
-import AuthCard from "../components/AuthCard";
-import FieldInput from "../components/FieldInput";
-import FieldGroup from "../components/FieldGroup";
-import axios from "../api/axios";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { Link } from "react-router-dom";
 import ROUTES from "../constants/routes";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { Caption1, RadioGroup, Radio, Field } from "@fluentui/react-components";
+import AuthCard from "../components/AuthCard";
+import AuthCardFooter from "../components/AuthCardFooter";
+import FieldGroup from "../components/FieldGroup";
+import FieldInput from "../components/FieldInput";
+import useSubmit from "../hooks/useSubmit";
+import useFeedback from "../hooks/useFeedback";
 
-const useStyles = makeStyles({
-  button: {
-    width: "100%",
-  },
-});
-
-interface SignUpCredentials {
+interface RegisterRequest {
   firstName: string;
   middleName?: string;
   lastName: string;
@@ -30,39 +19,37 @@ interface SignUpCredentials {
   role: string;
 }
 
-const SignUp: React.FC = () => {
-  const styles = useStyles();
-  const navigate = useNavigate();
-  const { control, handleSubmit, setValue, watch } = useForm<SignUpCredentials>(
-    {
-      mode: "onChange",
-      defaultValues: {
-        firstName: "",
-        middleName: "",
-        lastName: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        role: "student",
-      },
-    }
-  );
+interface RegisterResponse {
+  message: string;
+}
+
+const Register: React.FC = () => {
+  const { control, handleSubmit, setValue, watch } = useForm<RegisterRequest>({
+    mode: "onChange",
+    defaultValues: {
+      role: "student",
+    },
+  });
 
   const role = watch("role", "student");
 
-  const onSubmit: SubmitHandler<SignUpCredentials> = async (data) => {
-    try {
-      const signupData = { ...data };
-      delete signupData.confirmPassword;
-      await axios.post("/Auth/Register", JSON.stringify(signupData), {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      });
-      navigate(ROUTES.SIGN_IN);
-    } catch (err) {
-      console.error(err);
-      return;
-    }
+  const { submit, loading } = useSubmit();
+
+  const { feedback, setFeedback } = useFeedback();
+
+  const onSubmit: SubmitHandler<RegisterRequest> = (data) => {
+    sessionStorage.setItem("registeredEmail", data.email);
+    submit<RegisterResponse>({
+      url: "/Auth/Register",
+      data,
+      redirect: ROUTES.CONFIRM_EMAIL,
+      onError: (message) => {
+        setFeedback({
+          message: message || "Failed to sign up. Please try again.",
+          intent: "error",
+        });
+      },
+    });
   };
 
   return (
@@ -74,14 +61,14 @@ const SignUp: React.FC = () => {
         </Caption1>
       }
       footer={
-        <Button
-          appearance="primary"
-          className={styles.button}
-          aria-label="Sign up"
-          onClick={handleSubmit(onSubmit)}
-        >
-          Sign up
-        </Button>
+        <AuthCardFooter
+          message={feedback?.message} // Unified message
+          intent={feedback?.intent} // Unified intent
+          loading={loading}
+          handleSubmit={handleSubmit(onSubmit)}
+          buttonText="Sign up"
+          loadingText="Signing up"
+        />
       }
     >
       <FieldGroup>
@@ -186,4 +173,4 @@ const SignUp: React.FC = () => {
   );
 };
 
-export default SignUp;
+export default Register;

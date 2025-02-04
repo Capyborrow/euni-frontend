@@ -7,6 +7,7 @@ const ROUTES = {
   RESET_PASSWORD: "/reset_password",
   UNAUTHORIZED: "/unauthorized",
   CONFIRM_EMAIL: "/confirm_email",
+  CONFIRM_EMAIL_STATUS: "/confirm_email_status",
 };
 
 export default ROUTES;

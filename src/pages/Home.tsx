@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button, makeStyles, tokens } from "@fluentui/react-components";
-import LessonCard from "../components/LessonCard";
+// import LessonCard from "../components/LessonCard";
 import useRefreshToken from "../hooks/useRefreshToken";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
@@ -21,7 +21,7 @@ const useStyles = makeStyles({
 function Home() {
   const refresh = useRefreshToken();
   const axiosPrivate = useAxiosPrivate();
-  const { setAuth, auth } = useAuth();
+  const { setAuth } = useAuth();
 
   const test = async () => {
     console.log("test");
@@ -43,34 +43,33 @@ function Home() {
     }
   };
 
-  const confirmEmail = async () => {
-    try {
-      const response = await axiosPrivate.post(
-        "/Auth/ResendConfirmationEmail",
-        { email: auth?.email },
-        { withCredentials: true }
-      );
-      console.log("Confirm Email Response:", response.data);
-    } catch (err) {
-      console.error("Confirm Email Error:", err);
-    }
-  };
+  // const confirmEmail = async () => {
+  //   try {
+  //     const response = await axiosPrivate.post(
+  //       "/Auth/ResendConfirmationEmail",
+  //       { email: auth?.email },
+  //       { withCredentials: true }
+  //     );
+  //     console.log("Confirm Email Response:", response.data);
+  //   } catch (err) {
+  //     console.error("Confirm Email Error:", err);
+  //   }
+  // };
 
   const styles = useStyles();
   return (
     <div className={styles.root}>
-      <h1>Home</h1>
-      <p>Welcome to the home page!</p>
-      <Link to="/signin">Sign In</Link>
-      <Link to="/dashboard">Dash</Link>
-      <LessonCard
+      <h1>Test</h1>
+      <p>Welcome to the test page!</p>
+      <Link to="/dashboard">Dashboard</Link>
+      {/* <LessonCard
         subject="Subject name"
         name="Educator name"
         task="Task title"
         points={8}
         maxPoints={10}
         location="228"
-      ></LessonCard>
+      ></LessonCard> */}
       <Button appearance="primary" onClick={refresh}>
         Refresh
       </Button>
@@ -80,9 +79,9 @@ function Home() {
       <Button appearance="primary" onClick={logout}>
         Logout
       </Button>
-      <Button appearance="primary" onClick={confirmEmail}>
+      {/* <Button appearance="primary" onClick={confirmEmail}>
         ConfirmEmail
-      </Button>
+      </Button> */}
     </div>
   );
 }
