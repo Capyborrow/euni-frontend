@@ -25,7 +25,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
   console.log("Allowed Roles: ", allowedRoles);
   console.log("Email: ", auth?.email);
 
-  return allowedRoles.includes(role) ? (
+  return role === "admin" || allowedRoles.includes(role) ? (
     <Outlet />
   ) : auth?.email ? (
     <Navigate to={ROUTES.UNAUTHORIZED} state={{ from: location }} replace />

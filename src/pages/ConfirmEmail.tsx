@@ -15,7 +15,13 @@ const ConfirmEmail: React.FC = () => {
 
   const { feedback, setFeedback } = useFeedback();
 
-  const registeredEmail = sessionStorage.getItem("registeredEmail") || "";
+  const registeredEmail = sessionStorage.getItem("registeredEmail");
+
+  useEffect(() => {
+    if (!registeredEmail) {
+      navigate(ROUTES.SIGN_UP);
+    }
+  }, [navigate, registeredEmail]);
 
   useEffect(() => {
     if (!registeredEmail) return;
