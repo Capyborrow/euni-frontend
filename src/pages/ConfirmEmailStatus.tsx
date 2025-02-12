@@ -1,14 +1,9 @@
 import axios from "../api/axios";
-import { useState, useMemo, useEffect, useRef } from "react"; // Add useRef
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
-import {
-  Caption1,
-  Display,
-  LargeTitle,
-  makeStyles,
-  tokens,
-} from "@fluentui/react-components";
+import { makeStyles, tokens } from "@fluentui/react-components";
 import Loading from "./Loading";
+import StatusPage from "./StatusPage"; // Import StatusPage
 
 const useStyles = makeStyles({
   root: {
@@ -33,15 +28,14 @@ const ConfirmEmailStatus = () => {
   const [success, setSuccess] = useState<boolean | null>(null);
   const query = useQuery();
   const styles = useStyles();
-  const requestMade = useRef(false); // Track if the request has been made
+  const requestMade = useRef(false);
 
   useEffect(() => {
     const email = query.get("email");
     const token = query.get("token");
 
-    // Only make the request if it hasn't been made already
     if (email && token && !requestMade.current) {
-      requestMade.current = true; // Mark the request as made
+      requestMade.current = true;
 
       axios
         .post("/Auth/ConfirmEmail", JSON.stringify({ email, token }), {
@@ -56,27 +50,24 @@ const ConfirmEmailStatus = () => {
           setSuccess(false);
         });
     } else if (!email || !token) {
-      // If email or token is missing, mark as failed
       setSuccess(false);
     }
-  }, [query]); // Only re-run if `query` changes
+  }, [query]);
 
   return (
     <div className={styles.root}>
       {success === null ? (
         <Loading />
-      ) : success ? (
-        <>
-          <Display className={styles.display}>Success</Display>
-          <LargeTitle>Email verified</LargeTitle>
-          <Caption1>You may now close this tab</Caption1>
-        </>
       ) : (
-        <>
-          <Display className={styles.display}>Failed</Display>
-          <LargeTitle>Couldn't verify your email</LargeTitle>
-          <Caption1>Please try again later or contact support</Caption1>
-        </>
+        <StatusPage
+          status={success ? "Success" : "Failed"}
+          title={success ? "Email verified" : "Couldn't verify your email"}
+          description={
+            success
+              ? "You may now close this tab"
+              : "Please try again later or contact support"
+          }
+        />
       )}
     </div>
   );

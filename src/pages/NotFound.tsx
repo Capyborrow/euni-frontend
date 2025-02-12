@@ -1,33 +1,16 @@
-import {
-  Caption1,
-  Display,
-  LargeTitle,
-  makeStyles,
-  tokens,
-} from "@fluentui/react-components";
-
-const useStyles = makeStyles({
-  root: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh",
-    gap: "0.5rem",
-  },
-  display: {
-    color: tokens.colorBrandForeground2,
-  },
-});
+import StatusPage from "./StatusPage";
+import { useNavigate } from "react-router-dom";
 
 function NotFound() {
-  const styles = useStyles();
+  const navigate = useNavigate();
   return (
-    <div className={styles.root}>
-      <Display className={styles.display}>404</Display>
-      <LargeTitle>Not Found</LargeTitle>
-      <Caption1>The page you are looking for does not exist</Caption1>
-    </div>
+    <StatusPage
+      status="404"
+      title="Not Found"
+      description="The page you are looking for does not exist."
+      action="Go back"
+      onActionClick={() => navigate(-1)}
+    />
   );
 }
 
