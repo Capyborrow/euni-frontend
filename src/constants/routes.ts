@@ -8,6 +8,7 @@ const ROUTES = {
   UNAUTHORIZED: "/unauthorized",
   CONFIRM_EMAIL: "/confirm_email",
   CONFIRM_EMAIL_STATUS: "/confirm_email_status",
+  TIMETABLE: "/timetable",
 };
 
 export default ROUTES;

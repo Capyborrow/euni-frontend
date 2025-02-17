@@ -13,6 +13,7 @@ import Loading from "./pages/Loading";
 import PersistLogin from "./components/PersistLogin";
 import ConfirmEmail from "./pages/ConfirmEmail";
 import ConfirmEmailStatus from "./pages/ConfirmEmailStatus";
+import Timetable from "./pages/Timetable";
 
 const SignUp = lazy(() => import("./pages/Register"));
 const SignIn = lazy(() => import("./pages/Login"));
@@ -39,6 +40,9 @@ function App() {
             <Route element={<MainLayout />}>
               <Route path={ROUTES.HOME} element={<Home />} />
             </Route>
+          </Route>
+          <Route element={<MainLayout />}>
+            <Route path={ROUTES.TIMETABLE} element={<Timetable />} />
           </Route>
           <Route element={<ProtectedRoute allowedRoles={["teacher"]} />}>
             <Route element={<MainLayout />}>

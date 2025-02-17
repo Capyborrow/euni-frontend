@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button, makeStyles, tokens } from "@fluentui/react-components";
-// import LessonCard from "../components/LessonCard";
+import LessonCard from "../components/LessonCard";
 import useRefreshToken from "../hooks/useRefreshToken";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
@@ -62,14 +62,14 @@ function Home() {
       <h1>Test</h1>
       <p>Welcome to the test page!</p>
       <Link to="/dashboard">Dashboard</Link>
-      {/* <LessonCard
+      <LessonCard
         subject="Subject name"
         name="Educator name"
         task="Task title"
         points={8}
         maxPoints={10}
         location="228"
-      ></LessonCard> */}
+      ></LessonCard>
       <Button appearance="primary" onClick={refresh}>
         Refresh
       </Button>

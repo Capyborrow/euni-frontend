@@ -13,10 +13,17 @@ import {
 
 const useStyles = makeStyles({
   root: {
-    width: "fit-content",
+    //width: "fit-content",
+    width: "13rem",
   },
   name: {
     color: tokens.colorNeutralForeground3,
+  },
+  button: {
+    width: "100%",
+  },
+  badge: {
+    minWidth: "3rem",
   },
 });
 
@@ -46,24 +53,30 @@ const LessonCard: React.FC<LessonCardProps> = ({
         description={
           <Caption1Strong className={styles.name}>{name}</Caption1Strong>
         }
-      />
+        action={
+          <Badge
+            className={styles.badge}
+            size="large"
+            appearance="filled"
+            color="informative"
+            shape="circular"
+          >
+            {location}
+          </Badge>
+        }
+      ></CardHeader>
       <CardFooter>
-        <Button appearance="secondary">{task}</Button>
+        <Button className={styles.button} appearance="secondary">
+          {task}
+        </Button>
         <Badge
+          className={styles.badge}
           size="extra-large"
           appearance="filled"
           color="informative"
           shape="rounded"
         >
           {points}/{maxPoints}
-        </Badge>
-        <Badge
-          size="extra-large"
-          appearance="filled"
-          color="informative"
-          shape="rounded"
-        >
-          {location}
         </Badge>
       </CardFooter>
     </Card>
