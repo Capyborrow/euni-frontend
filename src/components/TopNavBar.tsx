@@ -8,7 +8,6 @@ import {
 } from "@fluentui/react-components";
 import {
   Alert32Regular,
-  Apps32Filled,
   Search20Regular,
   Settings32Regular,
 } from "@fluentui/react-icons";
@@ -25,6 +24,7 @@ const useStyles = makeStyles({
     position: "sticky",
     backgroundColor: tokens.colorNeutralBackground1,
     top: 0,
+    zIndex: 999,
   },
 
   title: {
@@ -56,7 +56,6 @@ function TopNavBar() {
   return (
     <div className={styles.root}>
       <Link className={styles.link} to={ROUTES.HOME}>
-        <Apps32Filled className={styles.title} />
         <Title1 className={styles.title}>eUni</Title1>
       </Link>
 

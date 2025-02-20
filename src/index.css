@@ -1,23 +1,24 @@
+/* index.css */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-html, body, #root {
-  height: 100%;
-  width: 100%;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f3f2f1; 
-  color: #323130;
-}
-
+html,
 body {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  width: 100%;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f3f2f1;
+  color: #323130;
   line-height: 1.5;
+  /* Remove display: flex here and let it scroll normally */
   overflow-x: hidden;
 }
 
-
+/* #root just needs to fill the full width, 
+   but allow the height to be as tall as needed. */
+#root {
+  width: 100%;
+  min-height: 100vh; /* This helps ensure a full-page background color if needed */
+}
