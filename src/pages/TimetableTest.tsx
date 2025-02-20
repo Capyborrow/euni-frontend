@@ -48,6 +48,14 @@ const TimetableTest = () => {
         status="unknown"
         taskStatus="due"
       />
+      <Lesson
+        subject="English for professional use"
+        teacher="Oleksandr Kalenchenko"
+        link="#"
+        type="Practice"
+        status="unknown"
+        taskStatus="due"
+      />
     </div>
   );
 };
