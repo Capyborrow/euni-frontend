@@ -1,5 +1,5 @@
 import React from "react";
-import Lesson from "../components/LessonTest";
+import Lesson from "./Lesson";
 import { Label } from "@fluentui/react-components";
 import { makeStyles } from "@fluentui/react-components";
 

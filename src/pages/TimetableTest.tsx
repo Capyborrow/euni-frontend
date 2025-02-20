@@ -10,7 +10,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Timetable = () => {
+const TimetableTest = () => {
   const styles = useStyles();
 
   return (
@@ -52,4 +52,4 @@ const Timetable = () => {
   );
 };
 
-export default Timetable;
+export default TimetableTest;

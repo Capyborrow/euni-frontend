@@ -3,8 +3,15 @@ import TopNavBar from "../components/TopNavBar";
 import { makeStyles } from "@fluentui/react-components";
 
 const useStyles = makeStyles({
-  root: {},
-  outlet: {},
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    height: "100vh",
+  },
+  outlet: {
+    flex: 1,
+    overflowY: "auto",
+  },
 });
 
 function MainLayout() {
