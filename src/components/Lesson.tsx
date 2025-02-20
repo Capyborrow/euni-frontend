@@ -1,6 +1,5 @@
 import {
   Avatar,
-  Badge,
   Card,
   CardHeader,
   CardFooter,
@@ -11,19 +10,14 @@ import {
   Tooltip,
   Caption1Strong,
   Caption1,
-  Menu,
-  MenuTrigger,
-  MenuPopover,
-  MenuList,
-  MenuItem,
+  TagGroup,
+  InteractionTag,
+  InteractionTagPrimary,
 } from "@fluentui/react-components";
 import {
   Link20Filled,
-  MoreHorizontal20Regular,
   Comment20Regular,
   Backpack20Regular,
-  WarningRegular,
-  AlertRegular,
 } from "@fluentui/react-icons";
 import { makeStyles } from "@fluentui/react-components";
 
@@ -64,8 +58,9 @@ interface LessonProps {
 }
 const useStyles = makeStyles({
   root: {
-    width: "15rem",
+    width: "12rem",
     gap: "0.5rem",
+    padding: "0.5rem",
   },
   cardFooter: {
     display: "flex",
@@ -101,7 +96,7 @@ const Lesson = ({
   const styles = useStyles();
 
   return (
-    <Card className={styles.root}>
+    <Card size="medium" className={styles.root}>
       <CardHeader
         className={styles.cardHeader}
         image={<Avatar />}
@@ -115,48 +110,25 @@ const Lesson = ({
             {teacher}
           </Caption1>
         }
-        action={
-          <Menu positioning={{ autoSize: true }}>
-            <MenuTrigger disableButtonEnhancement>
-              <Button
-                appearance="transparent"
-                icon={<MoreHorizontal20Regular />}
-              />
-            </MenuTrigger>
-
-            <MenuPopover>
-              <MenuList>
-                <MenuItem icon={<WarningRegular />}>Report</MenuItem>
-                <MenuItem icon={<AlertRegular />}>Remind</MenuItem>
-              </MenuList>
-            </MenuPopover>
-          </Menu>
-        }
       />
-      <CardFooter className={styles.cardFooter}>
-        {link ? (
-          <Link href={link} className={styles.link}>
-            <Badge
-              appearance="filled"
-              shape="rounded"
-              size="large"
-              icon={<Link20Filled />}
-            />
-          </Link>
-        ) : (
-          <Badge appearance="filled" shape="rounded" size="large">
-            {room}
-          </Badge>
+      <TagGroup appearance="brand" size="extra-small">
+        {room && (
+          <Tag>
+            <Caption1Strong>{room}</Caption1Strong>
+          </Tag>
         )}
-        <div className={styles.type}>
-          {type && (
-            <div className={styles.type}>
-              <Tag appearance="brand" size="small">
-                {type}
-              </Tag>
-            </div>
-          )}
-        </div>
+        {link && (
+          <InteractionTag>
+            <InteractionTagPrimary>
+              <Link href={link}>
+                <Link20Filled />
+              </Link>
+            </InteractionTagPrimary>
+          </InteractionTag>
+        )}
+        {type && <Tag>{type}</Tag>}
+      </TagGroup>
+      <CardFooter className={styles.cardFooter}>
         <Tooltip
           content={taskStatus ? taskStatusMap[taskStatus].tooltip : "Tasks"}
           relationship="description"
@@ -201,7 +173,7 @@ const Lesson = ({
             />
           )}
         </Tooltip>
-
+        <div style={{ width: "100%" }} />
         <Tooltip
           content={lessonStatusMap[status].tooltip}
           relationship="description"
