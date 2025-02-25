@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Avatar,
   Card,
@@ -6,59 +7,98 @@ import {
   Link,
   Tag,
   PresenceBadge,
-  Button,
   Tooltip,
   Caption1Strong,
   Caption1,
   TagGroup,
   InteractionTag,
   InteractionTagPrimary,
+  PresenceBadgeStatus,
+  Badge,
 } from "@fluentui/react-components";
 import {
   Link20Filled,
-  Comment20Regular,
-  Backpack20Regular,
+  Backpack24Regular,
+  Comment24Regular,
 } from "@fluentui/react-icons";
 import { makeStyles } from "@fluentui/react-components";
-
-type LessonStatus = "attended" | "skipped" | "cancelled" | "unknown";
-type TaskStatus = "done" | "overdue" | "due";
-type CommentStatus = "unread";
+import {
+  LessonStatusEnum,
+  AssignmentStatusEnum,
+  CommentStatusEnum,
+  LessonTypeEnum,
+} from "../types/Lesson";
+import AvatarButton from "./AvatarButton";
 
 interface StatusMetadata {
-  icon: "available" | "do-not-disturb" | "offline" | "away" | "unknown";
+  icon: PresenceBadgeStatus;
+  outOfOffice?: boolean;
   tooltip: string;
 }
 
-const lessonStatusMap: Record<LessonStatus, StatusMetadata> = {
-  attended: { icon: "available", tooltip: "You attended this lesson" },
-  skipped: { icon: "do-not-disturb", tooltip: "You skipped this lesson" },
-  cancelled: { icon: "offline", tooltip: "This lesson was cancelled" },
-  unknown: { icon: "unknown", tooltip: "Status" },
-};
-
-const taskStatusMap: Record<TaskStatus, StatusMetadata> = {
-  due: { icon: "away", tooltip: "You have tasks due soon" },
-  overdue: { icon: "do-not-disturb", tooltip: "You have tasks overdue" },
-  done: {
+const lessonStatusMap: Record<LessonStatusEnum, StatusMetadata> = {
+  [LessonStatusEnum.Attended]: {
     icon: "available",
-    tooltip: "You have completed all tasks",
+    tooltip: "You attended this lesson",
+  },
+  [LessonStatusEnum.Skipped]: {
+    icon: "do-not-disturb",
+    tooltip: "You skipped this lesson",
+  },
+  [LessonStatusEnum.Excused]: {
+    icon: "do-not-disturb",
+    tooltip: "You were excused from this lesson",
+    outOfOffice: true,
+  },
+  [LessonStatusEnum.Cancelled]: {
+    icon: "offline",
+    tooltip: "This lesson was cancelled",
+  },
+  [LessonStatusEnum.Unknown]: { icon: "unknown", tooltip: "Status" },
+  [LessonStatusEnum.Current]: {
+    icon: "out-of-office",
+    tooltip: "You are in this lesson right now",
   },
 };
 
-interface LessonProps {
+const assignmentStatusMap: Record<AssignmentStatusEnum, StatusMetadata> = {
+  [AssignmentStatusEnum.Due]: {
+    icon: "away",
+    tooltip: "You have tasks due soon",
+  },
+  [AssignmentStatusEnum.Overdue]: {
+    icon: "do-not-disturb",
+    tooltip: "You have tasks overdue",
+  },
+  [AssignmentStatusEnum.Submitted]: {
+    icon: "available",
+    tooltip: "You have tasks in review",
+    outOfOffice: true,
+  },
+  [AssignmentStatusEnum.Graded]: {
+    icon: "available",
+    tooltip: "You have completed all tasks",
+  },
+  [AssignmentStatusEnum.Expired]: {
+    icon: "offline",
+    tooltip: "You have expired tasks",
+  },
+};
+
+export interface LessonProps {
   subject: string;
   teacher: string;
   link?: string;
   room?: string;
-  type?: string;
-  status?: LessonStatus;
-  taskStatus?: TaskStatus;
-  commentStatus?: CommentStatus;
+  type?: LessonTypeEnum;
+  status?: LessonStatusEnum;
+  assignmentStatus?: AssignmentStatusEnum;
+  commentStatus?: CommentStatusEnum;
 }
+
 const useStyles = makeStyles({
   root: {
-    width: "12rem",
+    minWidth: "9rem",
     gap: "0.5rem",
     padding: "0.5rem",
   },
@@ -83,23 +123,23 @@ const useStyles = makeStyles({
   },
 });
 
-const Lesson = ({
+const Lesson: React.FC<LessonProps> = ({
   subject,
   teacher,
   link,
   room,
   type,
-  status = "unknown",
-  taskStatus,
+  status = LessonStatusEnum.Unknown,
+  assignmentStatus,
   commentStatus,
-}: LessonProps) => {
+}) => {
   const styles = useStyles();
 
   return (
     <Card size="medium" className={styles.root}>
       <CardHeader
         className={styles.cardHeader}
-        image={<Avatar />}
+        image={<Avatar color="neutral" name={teacher} />}
         header={
           <Caption1Strong truncate wrap={false}>
             {subject}
@@ -129,59 +169,51 @@ const Lesson = ({
         {type && <Tag>{type}</Tag>}
       </TagGroup>
       <CardFooter className={styles.cardFooter}>
-        <Tooltip
-          content={taskStatus ? taskStatusMap[taskStatus].tooltip : "Tasks"}
-          relationship="description"
-          showDelay={1000}
-        >
-          {taskStatus ? (
-            <Avatar
-              icon={<Button icon={<Backpack20Regular />} />}
-              badge={{ status: taskStatusMap[taskStatus].icon }}
-              shape="square"
-              size={24}
-            />
-          ) : (
-            <Avatar
-              className={styles.avatar}
-              icon={<Button icon={<Backpack20Regular />} />}
-              shape="square"
-              size={24}
-            />
-          )}
-        </Tooltip>
-        <Tooltip
-          content={
-            commentStatus === "unread" ? "You have comments unread" : "Comments"
+        <AvatarButton
+          tooltip={
+            assignmentStatus
+              ? assignmentStatusMap[assignmentStatus].tooltip
+              : "Assignments"
           }
-          relationship="description"
-          showDelay={1000}
-        >
-          {commentStatus === "unread" ? (
-            <Avatar
-              icon={<Button icon={<Comment20Regular />} />}
-              badge={{ status: "busy" }}
-              shape="square"
-              size={24}
-            />
-          ) : (
-            <Avatar
-              className={styles.avatar}
-              icon={<Button icon={<Comment20Regular />} />}
-              shape="square"
-              size={24}
-            />
-          )}
-        </Tooltip>
+          icon={<Backpack24Regular />}
+          badgeStatus={
+            assignmentStatus
+              ? assignmentStatusMap[assignmentStatus].icon
+              : undefined
+          }
+          outOfOffice={
+            assignmentStatus
+              ? assignmentStatusMap[assignmentStatus].outOfOffice
+              : undefined
+          }
+        />
+        <AvatarButton
+          tooltip={
+            commentStatus === CommentStatusEnum.Unread
+              ? "You have comments unread"
+              : "Comments"
+          }
+          icon={<Comment24Regular />}
+          badgeStatus={
+            commentStatus === CommentStatusEnum.Unread ? "busy" : undefined
+          }
+        />
         <div style={{ width: "100%" }} />
         <Tooltip
           content={lessonStatusMap[status].tooltip}
           relationship="description"
           showDelay={1000}
         >
-          <PresenceBadge
-            size="medium"
-            status={lessonStatusMap[status].icon ?? "unknown"}
+          <Badge
+            size="large"
+            appearance="ghost"
+            icon={
+              <PresenceBadge
+                size="medium"
+                status={lessonStatusMap[status].icon ?? "unknown"}
+                outOfOffice={lessonStatusMap[status].outOfOffice}
+              />
+            }
           />
         </Tooltip>
       </CardFooter>
