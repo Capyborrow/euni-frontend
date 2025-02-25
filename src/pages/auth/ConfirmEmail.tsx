@@ -1,12 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
-import ROUTES from "../constants/routes";
+import ROUTES from "../../constants/routes";
 import { Caption1 } from "@fluentui/react-components";
-import AuthCard from "../components/AuthCard";
-import useSubmit from "../hooks/useSubmit";
-import AuthCardFooter from "../components/AuthCardFooter";
-import useFeedback from "../hooks/useFeedback";
+import AuthCard from "../../components/auth/AuthCard";
+import useSubmit from "../../hooks/useSubmit";
+import AuthCardFooter from "../../components/auth/AuthCardFooter";
+import useFeedback from "../../hooks/useFeedback";
 import { useEffect } from "react";
-import axios from "../api/axios";
+import axios from "../../api/axios";
 
 const ConfirmEmail: React.FC = () => {
   const navigate = useNavigate();

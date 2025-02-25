@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
-import ROUTES from "../constants/routes";
+import ROUTES from "../../constants/routes";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Caption1, RadioGroup, Radio, Field } from "@fluentui/react-components";
-import AuthCard from "../components/AuthCard";
-import AuthCardFooter from "../components/AuthCardFooter";
-import FieldGroup from "../components/FieldGroup";
-import FieldInput from "../components/FieldInput";
-import useSubmit from "../hooks/useSubmit";
-import useFeedback from "../hooks/useFeedback";
+import AuthCard from "../../components/auth/AuthCard";
+import AuthCardFooter from "../../components/auth/AuthCardFooter";
+import FieldGroup from "../../components/auth/FieldGroup";
+import FieldInput from "../../components/auth/FieldInput";
+import useSubmit from "../../hooks/useSubmit";
+import useFeedback from "../../hooks/useFeedback";
 
 interface RegisterRequest {
   firstName: string;

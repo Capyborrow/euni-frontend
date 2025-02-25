@@ -6,7 +6,7 @@ import {
 } from "@fluentui/react-components";
 import { makeStyles } from "@fluentui/react-components";
 import { Link } from "react-router-dom";
-import ROUTES from "../constants/routes";
+import ROUTES from "../../constants/routes";
 
 const useStyles = makeStyles({
   root: {

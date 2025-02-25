@@ -1,15 +1,15 @@
 import { Link } from "react-router-dom";
-import ROUTES from "../constants/routes";
+import ROUTES from "../../constants/routes";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Caption1, Checkbox } from "@fluentui/react-components";
-import AuthCard from "../components/AuthCard";
-import FieldInput from "../components/FieldInput";
-import useAuth from "../hooks/useAuth";
-import { AuthData as LoginResponse } from "../context/AuthProvider";
-import useSubmit from "../hooks/useSubmit";
+import AuthCard from "../../components/auth/AuthCard";
+import FieldInput from "../../components/auth/FieldInput";
+import useAuth from "../../hooks/useAuth";
+import { AuthData as LoginResponse } from "../../context/AuthProvider";
+import useSubmit from "../../hooks/useSubmit";
 import { jwtDecode } from "jwt-decode";
-import AuthCardFooter from "../components/AuthCardFooter";
-import useFeedback from "../hooks/useFeedback";
+import AuthCardFooter from "../../components/auth/AuthCardFooter";
+import useFeedback from "../../hooks/useFeedback";
 
 interface LoginRequest {
   email: string;

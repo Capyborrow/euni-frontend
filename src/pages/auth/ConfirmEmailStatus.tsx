@@ -1,9 +1,9 @@
-import axios from "../api/axios";
+import axios from "../../api/axios";
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { makeStyles, tokens } from "@fluentui/react-components";
-import Loading from "./Loading";
-import StatusPage from "./StatusPage"; // Import StatusPage
+import Loading from "../status/Loading";
+import StatusPage from "../status/StatusPage"; // Import StatusPage
 
 const useStyles = makeStyles({
   root: {

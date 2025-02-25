@@ -2,24 +2,23 @@ import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import { makeStyles } from "@fluentui/react-components";
 import ROUTES from "./constants/routes";
-import NotFound from "./pages/NotFound";
-import Unauthorized from "./pages/Unauthorized";
-import ProtectedRoute from "./components/ProtectedRoute";
+import NotFound from "./pages/status/NotFound";
+import Unauthorized from "./pages/status/Unauthorized";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 import MainLayout from "./layouts/MainLayout";
 import AuthLayout from "./layouts/AuthLayout";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
-import Loading from "./pages/Loading";
-import PersistLogin from "./components/PersistLogin";
-import ConfirmEmail from "./pages/ConfirmEmail";
-import ConfirmEmailStatus from "./pages/ConfirmEmailStatus";
+import Loading from "./pages/status/Loading";
+import PersistLogin from "./components/auth/PersistLogin";
+import ConfirmEmail from "./pages/auth/ConfirmEmail";
+import ConfirmEmailStatus from "./pages/auth/ConfirmEmailStatus";
 import Timetable from "./pages/Timetable";
-import TimetableTest from "./pages/TimetableTest";
 
-const SignUp = lazy(() => import("./pages/Register"));
-const SignIn = lazy(() => import("./pages/Login"));
-const RestorePassword = lazy(() => import("./pages/ForgotPassword"));
-const ResetPassword = lazy(() => import("./pages/ResetPassword"));
+const SignUp = lazy(() => import("./pages/auth/Register"));
+const SignIn = lazy(() => import("./pages/auth/Login"));
+const RestorePassword = lazy(() => import("./pages/auth/ForgotPassword"));
+const ResetPassword = lazy(() => import("./pages/auth/ResetPassword"));
 
 const useStyles = makeStyles({
   root: {
@@ -45,7 +44,6 @@ function App() {
             </Route>
             <Route element={<MainLayout />}>
               <Route path={ROUTES.TIMETABLE} element={<Timetable />} />
-              <Route path={ROUTES.TEST} element={<TimetableTest />} />
             </Route>
             <Route element={<ProtectedRoute allowedRoles={["teacher"]} />}>
               <Route element={<MainLayout />}>

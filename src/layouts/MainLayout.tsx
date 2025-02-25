@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import TopNavBar from "../components/TopNavBar";
-import { makeStyles } from "@fluentui/react-components";
+import { makeStyles, tokens } from "@fluentui/react-components";
 
 const useStyles = makeStyles({
   root: {
@@ -11,6 +11,7 @@ const useStyles = makeStyles({
   outlet: {
     flex: 1,
     overflowY: "auto",
+    backgroundColor: tokens.colorBrandBackground2,
   },
 });
 
