@@ -1,8 +1,6 @@
-import { Link } from "react-router-dom";
-import { Button, makeStyles, tokens } from "@fluentui/react-components";
-import useRefreshToken from "../hooks/useRefreshToken";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import useAuth from "../hooks/useAuth";
+import { Link } from "../components/Link";
+import { makeStyles, tokens } from "@fluentui/react-components";
+import ROUTES from "../constants/routes";
 
 const useStyles = makeStyles({
   root: {
@@ -18,62 +16,22 @@ const useStyles = makeStyles({
 });
 
 function Home() {
-  const refresh = useRefreshToken();
-  const axiosPrivate = useAxiosPrivate();
-  const { setAuth } = useAuth();
-
-  const test = async () => {
-    console.log("test");
-    const response = await axiosPrivate.get("/Student");
-    console.log(response.data);
-  };
-
-  const logout = async () => {
-    try {
-      const response = await axiosPrivate.post(
-        "/Auth/Logout",
-        {},
-        { withCredentials: true }
-      );
-      console.log("Logout Response:", response.data);
-      setAuth({ accessToken: "", email: "" });
-    } catch (err) {
-      console.error("Logout Error:", err);
-    }
-  };
-
-  // const confirmEmail = async () => {
-  //   try {
-  //     const response = await axiosPrivate.post(
-  //       "/Auth/ResendConfirmationEmail",
-  //       { email: auth?.email },
-  //       { withCredentials: true }
-  //     );
-  //     console.log("Confirm Email Response:", response.data);
-  //   } catch (err) {
-  //     console.error("Confirm Email Error:", err);
-  //   }
-  // };
-
   const styles = useStyles();
   return (
     <div className={styles.root}>
       <h1>Test</h1>
       <p>Welcome to the test page!</p>
-      <Link to="/dashboard">Dashboard</Link>
-
-      <Button appearance="primary" onClick={refresh}>
-        Refresh
-      </Button>
-      <Button appearance="primary" onClick={test}>
-        Test
-      </Button>
-      <Button appearance="primary" onClick={logout}>
-        Logout
-      </Button>
-      {/* <Button appearance="primary" onClick={confirmEmail}>
-        ConfirmEmail
-      </Button> */}
+      <Link to={ROUTES.HOME}>Home</Link>
+      <Link to={ROUTES.SIGN_IN}>Sign in (auth)</Link>
+      <Link to={ROUTES.SIGN_UP}>Sign up (auth)</Link>
+      <Link to={ROUTES.FORGOT_PASSWORD}>Forgot password (auth)</Link>
+      <Link to={ROUTES.RESET_PASSWORD}>Reset password (auth)</Link>
+      <Link to={ROUTES.CONFIRM_EMAIL}>Confirm email (auth)</Link>
+      <Link to={ROUTES.CONFIRM_EMAIL_STATUS}>Confirm email (status)</Link>
+      <Link to={ROUTES.TIMETABLE}>Timetable (student)</Link>
+      <Link to={ROUTES.DASHBOARD}>Dashboard (teacher)</Link>
+      <Link to={ROUTES.UNAUTHORIZED}>Unauthorized (status)</Link>
+      <Link to="/somenonexistingroute">Not found (status)</Link>
     </div>
   );
 }

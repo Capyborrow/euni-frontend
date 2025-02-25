@@ -6,7 +6,6 @@ import { jwtDecode } from "jwt-decode";
 interface ProtectedRouteProps {
   allowedRoles: string[];
 }
-
 interface DecodedToken {
   role: string;
 }
@@ -21,13 +20,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
 
   const role = decoded?.role || "";
 
-  console.log("Role: ", role);
-  console.log("Allowed Roles: ", allowedRoles);
-  console.log("Email: ", auth?.email);
-
-  return role === "admin" || allowedRoles.includes(role) ? (
+  return role === "admin" || allowedRoles.includes(role || "any") ? (
     <Outlet />
-  ) : auth?.email ? (
+  ) : auth?.id ? (
     <Navigate to={ROUTES.UNAUTHORIZED} state={{ from: location }} replace />
   ) : (
     <Navigate to={ROUTES.SIGN_IN} state={{ from: location }} replace />

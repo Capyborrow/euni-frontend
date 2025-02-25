@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "../../components/Link";
 import ROUTES from "../../constants/routes";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Caption1, Checkbox } from "@fluentui/react-components";
@@ -34,6 +34,7 @@ const Login: React.FC = () => {
         setAuth({
           accessToken: data.accessToken,
           email: jwtDecode<{ email: string }>(data.accessToken).email,
+          id: jwtDecode<{ nameid: string }>(data.accessToken).nameid,
         });
       },
       onError: (message) => {

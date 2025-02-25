@@ -1,13 +1,13 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Caption1 } from "@fluentui/react-components";
-import AuthCard from "../components/auth/AuthCard";
-import FieldInput from "../components/auth/FieldInput";
-import FieldGroup from "../components/auth/FieldGroup";
-import useSubmit from "../hooks/useSubmit";
-import ROUTES from "../constants/routes";
+import AuthCard from "../../components/auth/AuthCard";
+import FieldInput from "../../components/auth/FieldInput";
+import FieldGroup from "../../components/auth/FieldGroup";
+import useSubmit from "../../hooks/useSubmit";
+import ROUTES from "../../constants/routes";
 import { useLocation } from "react-router-dom";
-import AuthCardFooter from "../components/auth/AuthCardFooter";
-import useFeedback from "../hooks/useFeedback";
+import AuthCardFooter from "../../components/auth/AuthCardFooter";
+import useFeedback from "../../hooks/useFeedback";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);

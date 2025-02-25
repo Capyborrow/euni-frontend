@@ -28,7 +28,7 @@ import {
   CommentStatusEnum,
   LessonTypeEnum,
 } from "../types/Lesson";
-import AvatarButton from "./AvatarButton";
+import ButtonWithBadge from "./ButtonWithBadge";
 
 interface StatusMetadata {
   icon: PresenceBadgeStatus;
@@ -169,7 +169,7 @@ const Lesson: React.FC<LessonProps> = ({
         {type && <Tag>{type}</Tag>}
       </TagGroup>
       <CardFooter className={styles.cardFooter}>
-        <AvatarButton
+        <ButtonWithBadge
           tooltip={
             assignmentStatus
               ? assignmentStatusMap[assignmentStatus].tooltip
@@ -187,7 +187,7 @@ const Lesson: React.FC<LessonProps> = ({
               : undefined
           }
         />
-        <AvatarButton
+        <ButtonWithBadge
           tooltip={
             commentStatus === CommentStatusEnum.Unread
               ? "You have comments unread"

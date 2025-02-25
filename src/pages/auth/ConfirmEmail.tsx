@@ -1,4 +1,5 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "../../components/Link";
+import { useNavigate } from "react-router-dom";
 import ROUTES from "../../constants/routes";
 import { Caption1 } from "@fluentui/react-components";
 import AuthCard from "../../components/auth/AuthCard";

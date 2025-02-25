@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "../../components/Link";
 import ROUTES from "../../constants/routes";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Caption1, RadioGroup, Radio, Field } from "@fluentui/react-components";

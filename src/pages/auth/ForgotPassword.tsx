@@ -1,10 +1,10 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Caption1 } from "@fluentui/react-components";
-import AuthCard from "../components/auth/AuthCard";
-import FieldInput from "../components/auth/FieldInput";
-import useSubmit from "../hooks/useSubmit";
-import AuthCardFooter from "../components/auth/AuthCardFooter";
-import useFeedback from "../hooks/useFeedback";
+import AuthCard from "../../components/auth/AuthCard";
+import FieldInput from "../../components/auth/FieldInput";
+import useSubmit from "../../hooks/useSubmit";
+import AuthCardFooter from "../../components/auth/AuthCardFooter";
+import useFeedback from "../../hooks/useFeedback";
 
 interface ForgotPasswordCredentials {
   email: string;

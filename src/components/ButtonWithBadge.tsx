@@ -6,7 +6,7 @@ import {
   PresenceBadgeStatus,
 } from "@fluentui/react-components";
 
-const AvatarButton: React.FC<{
+const ButtonWithBadge: React.FC<{
   tooltip: string;
   icon: JSX.Element;
   badgeStatus?: PresenceBadgeStatus;
@@ -33,4 +33,4 @@ const AvatarButton: React.FC<{
   </Tooltip>
 );
 
-export default AvatarButton;
+export default ButtonWithBadge;

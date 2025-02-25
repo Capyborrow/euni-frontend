@@ -22,6 +22,9 @@ const useRefreshToken = () => {
         email:
           prev?.email ||
           jwtDecode<{ email: string }>(response.data.accessToken).email,
+        id:
+          prev?.id ||
+          jwtDecode<{ nameid: string }>(response.data.accessToken).nameid,
       };
     });
     return response.data.accessToken;

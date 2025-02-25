@@ -1,18 +1,12 @@
-import {
-  Button,
-  Input,
-  Title1,
-  Avatar,
-  makeStyles,
-  tokens,
-} from "@fluentui/react-components";
+import { Button, Input, makeStyles, tokens } from "@fluentui/react-components";
 import {
   Alert32Regular,
+  CalendarCheckmarkFilled,
   Search20Regular,
-  Settings32Regular,
 } from "@fluentui/react-icons";
-import { Link } from "react-router-dom";
+import { Link } from "../components/Link";
 import ROUTES from "../constants/routes";
+import UserMenu from "./auth/UserMenu";
 
 const useStyles = makeStyles({
   root: {
@@ -35,19 +29,13 @@ const useStyles = makeStyles({
     flex: 1,
     display: "flex",
     alignItems: "center",
-    justifyContent: "center",
-    padding: "0 1rem",
+    justifyContent: "start",
+    padding: "0 .5rem",
   },
 
   input: {
     flex: 1,
-    maxWidth: "20rem",
-  },
-  link: {
-    textDecoration: "none",
-    display: "flex",
-    alignItems: "center",
-    gap: ".5rem",
+    maxWidth: "15rem",
   },
 });
 
@@ -55,8 +43,12 @@ function TopNavBar() {
   const styles = useStyles();
   return (
     <div className={styles.root}>
-      <Link className={styles.link} to={ROUTES.HOME}>
-        <Title1 className={styles.title}>eUni</Title1>
+      <Link to={ROUTES.HOME} className={styles.title}>
+        <Button
+          appearance="primary"
+          size="large"
+          icon={<CalendarCheckmarkFilled fontSize="4rem" />}
+        />
       </Link>
 
       <div className={styles.inputContainer}>
@@ -68,8 +60,7 @@ function TopNavBar() {
         />
       </div>
       <Button icon={<Alert32Regular />} appearance="subtle" size="large" />
-      <Button icon={<Settings32Regular />} appearance="subtle" size="large" />
-      <Button icon={<Avatar />} appearance="transparent" size="large" />
+      <UserMenu />
     </div>
   );
 }
