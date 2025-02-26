@@ -7,12 +7,14 @@ import {
 import { Link } from "../components/Link";
 import ROUTES from "../constants/routes";
 import UserMenu from "./auth/UserMenu";
+import useAuth from "../hooks/useAuth";
+import { useNavigate } from "react-router";
 
 const useStyles = makeStyles({
   root: {
     display: "flex",
     alignItems: "center",
-    padding: ".5rem .5rem",
+    padding: ".5rem 1rem .5rem .5rem",
     gap: ".5rem",
     boxShadow: tokens.shadow8,
     position: "sticky",
@@ -40,6 +42,8 @@ const useStyles = makeStyles({
 });
 
 function TopNavBar() {
+  const { auth } = useAuth();
+  const navigate = useNavigate();
   const styles = useStyles();
   return (
     <div className={styles.root}>
@@ -59,8 +63,20 @@ function TopNavBar() {
           appearance="filled-darker"
         />
       </div>
-      <Button icon={<Alert32Regular />} appearance="subtle" size="large" />
-      <UserMenu />
+      {auth?.accessToken ? (
+        <>
+          <Button icon={<Alert32Regular />} appearance="subtle" size="large" />
+          <UserMenu />
+        </>
+      ) : (
+        <Button
+          appearance="primary"
+          size="medium"
+          onClick={() => navigate(ROUTES.SIGN_IN)}
+        >
+          Sign in
+        </Button>
+      )}
     </div>
   );
 }
