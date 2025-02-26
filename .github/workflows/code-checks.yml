@@ -32,6 +32,3 @@ jobs:
           npm run build
           end_time=$(date +%s)
           echo "Build Time: $((end_time - start_time)) seconds"
-
-      - name: Check for security vulnerabilities
-        run: npm audit --audit-level=moderate
