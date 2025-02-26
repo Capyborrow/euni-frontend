@@ -33,14 +33,5 @@ jobs:
           end_time=$(date +%s)
           echo "Build Time: $((end_time - start_time)) seconds"
 
-      - name: Analyze bundle size
-        run: npx size-limit --json > size-limit-report.json
-
-      - name: Upload bundle size report
-        uses: actions/upload-artifact@v4
-        with:
-          name: size-limit-report
-          path: size-limit-report.json
-
       - name: Check for security vulnerabilities
         run: npm audit --audit-level=moderate
