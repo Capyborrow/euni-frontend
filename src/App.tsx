@@ -14,7 +14,10 @@ import PersistLogin from "./components/auth/PersistLogin";
 import ConfirmEmail from "./pages/auth/ConfirmEmail";
 import ConfirmEmailStatus from "./pages/auth/ConfirmEmailStatus";
 import Timetable from "./pages/Timetable";
+import TimetableMock from "./pages/TimetableMock";
+
 import Profile from "./pages/Profile";
+import DashboardLayout from "./layouts/DashboardLayout";
 
 const SignUp = lazy(() => import("./pages/auth/Register"));
 const SignIn = lazy(() => import("./pages/auth/Login"));
@@ -35,17 +38,25 @@ function App() {
       <Suspense fallback={<Loading />}>
         <Routes>
           <Route path={ROUTES.UNAUTHORIZED} element={<Unauthorized />} />
-          <Route element={<MainLayout />}>
-            <Route path={ROUTES.HOME} element={<Home />} />
-          </Route>
           <Route element={<PersistLogin />}>
+            <Route element={<MainLayout />}>
+              <Route path={ROUTES.HOME} element={<Home />} />
+            </Route>
             <Route element={<ProtectedRoute allowedRoles={["student"]} />}>
-              <Route element={<MainLayout />}>
+              <Route element={<DashboardLayout />}>
                 <Route path={ROUTES.TIMETABLE} element={<Timetable />} />
               </Route>
             </Route>
+            <Route element={<ProtectedRoute allowedRoles={["student"]} />}>
+              <Route element={<DashboardLayout />}>
+                <Route
+                  path={ROUTES.TIMETABLE_MOCK}
+                  element={<TimetableMock />}
+                />
+              </Route>
+            </Route>
             <Route element={<ProtectedRoute allowedRoles={["teacher"]} />}>
-              <Route element={<MainLayout />}>
+              <Route element={<DashboardLayout />}>
                 <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
               </Route>
             </Route>

@@ -11,10 +11,12 @@
   },
   "dependencies": {
     "@fluentui/react-components": "^9.56.6",
+    "@fluentui/react-datepicker-compat": "^0.5.0",
     "axios": "^1.7.9",
     "date-fns": "^4.1.0",
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",
+    "react-datepicker-compat": "^1.5.4",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.54.1",
     "react-router-dom": "^7.0.2"

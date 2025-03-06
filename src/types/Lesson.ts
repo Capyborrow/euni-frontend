@@ -1,10 +1,9 @@
 export enum LessonStatusEnum {
-  Attended = "attended",
-  Skipped = "skipped",
-  Excused = "excused",
-  Cancelled = "cancelled",
-  Unknown = "unknown",
-  Current = "current",
+  Attended = "Attended",
+  Skipped = "Skipped",
+  Excused = "Excused",
+  Cancelled = "Cancelled",
+  Unknown = "Unknown",
 }
 
 export enum LessonTypeEnum {
@@ -16,11 +15,11 @@ export enum LessonTypeEnum {
 }
 
 export enum AssignmentStatusEnum {
-  Due = "due",
-  Overdue = "overdue",
-  Submitted = "submitted",
-  Graded = "graded",
-  Expired = "expired",
+  Due = "Due",
+  Overdue = "Overdue",
+  Submitted = "Submitted",
+  Graded = "Graded",
+  Expired = "Expired",
 }
 
 export enum CommentStatusEnum {
@@ -29,10 +28,8 @@ export enum CommentStatusEnum {
 }
 
 export interface LessonType {
-  date?: Date;
-  day: number;
-  timeSlot: number;
-  subject: string;
+  date: Date;
+  subjectName: string;
   teacherName: string;
   teacherAvatar?: string;
   link?: string;

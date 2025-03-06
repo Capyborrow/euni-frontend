@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
+import DashboardBar from "../components/DashboardBar";
 import { makeStyles, tokens } from "@fluentui/react-components";
-import NavBar from "../components/NavBar";
+import { DateProvider } from "../context/DateProvider";
 
 const useStyles = makeStyles({
   root: {
@@ -19,12 +20,14 @@ function MainLayout() {
   const styles = useStyles();
 
   return (
-    <div className={styles.root}>
-      <NavBar />
-      <div className={styles.outlet}>
-        <Outlet />
+    <DateProvider>
+      <div className={styles.root}>
+        <DashboardBar />
+        <div className={styles.outlet}>
+          <Outlet />
+        </div>
       </div>
-    </div>
+    </DateProvider>
   );
 }
 

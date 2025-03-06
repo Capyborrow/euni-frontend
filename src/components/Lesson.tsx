@@ -15,6 +15,7 @@ import {
   InteractionTagPrimary,
   PresenceBadgeStatus,
   Badge,
+  mergeClasses,
 } from "@fluentui/react-components";
 import {
   Link20Filled,
@@ -55,10 +56,6 @@ const lessonStatusMap: Record<LessonStatusEnum, StatusMetadata> = {
     tooltip: "This lesson was cancelled",
   },
   [LessonStatusEnum.Unknown]: { icon: "unknown", tooltip: "Status" },
-  [LessonStatusEnum.Current]: {
-    icon: "out-of-office",
-    tooltip: "You are in this lesson right now",
-  },
 };
 
 const assignmentStatusMap: Record<AssignmentStatusEnum, StatusMetadata> = {
@@ -87,13 +84,15 @@ const assignmentStatusMap: Record<AssignmentStatusEnum, StatusMetadata> = {
 
 export interface LessonProps {
   subject: string;
-  teacher: string;
+  teacherName: string;
+  teacherAvatar?: string;
   link?: string;
   room?: string;
   type?: LessonTypeEnum;
   status?: LessonStatusEnum;
   assignmentStatus?: AssignmentStatusEnum;
   commentStatus?: CommentStatusEnum;
+  className?: string;
 }
 
 const useStyles = makeStyles({
@@ -101,6 +100,7 @@ const useStyles = makeStyles({
     minWidth: "9rem",
     gap: "0.5rem",
     padding: "0.5rem",
+    width: "100%",
   },
   cardFooter: {
     display: "flex",
@@ -125,21 +125,29 @@ const useStyles = makeStyles({
 
 const Lesson: React.FC<LessonProps> = ({
   subject,
-  teacher,
+  teacherName,
+  teacherAvatar,
   link,
   room,
   type,
   status = LessonStatusEnum.Unknown,
   assignmentStatus,
   commentStatus,
+  className,
 }) => {
   const styles = useStyles();
 
   return (
-    <Card size="medium" className={styles.root}>
+    <Card size="medium" className={mergeClasses(styles.root, className)}>
       <CardHeader
         className={styles.cardHeader}
-        image={<Avatar color="neutral" name={teacher} />}
+        image={
+          <Avatar
+            color="colorful"
+            name={teacherName}
+            image={{ src: teacherAvatar }}
+          />
+        }
         header={
           <Caption1Strong truncate wrap={false}>
             {subject}
@@ -147,7 +155,7 @@ const Lesson: React.FC<LessonProps> = ({
         }
         description={
           <Caption1 truncate wrap={false}>
-            {teacher}
+            {teacherName}
           </Caption1>
         }
       />
@@ -172,21 +180,22 @@ const Lesson: React.FC<LessonProps> = ({
         <ButtonWithBadge
           tooltip={
             assignmentStatus
-              ? assignmentStatusMap[assignmentStatus].tooltip
+              ? assignmentStatusMap[assignmentStatus]?.tooltip
               : "Assignments"
           }
           icon={<Backpack24Regular />}
           badgeStatus={
             assignmentStatus
-              ? assignmentStatusMap[assignmentStatus].icon
+              ? assignmentStatusMap[assignmentStatus]?.icon
               : undefined
           }
           outOfOffice={
             assignmentStatus
-              ? assignmentStatusMap[assignmentStatus].outOfOffice
+              ? assignmentStatusMap[assignmentStatus]?.outOfOffice
               : undefined
           }
         />
+
         <ButtonWithBadge
           tooltip={
             commentStatus === CommentStatusEnum.Unread
@@ -200,7 +209,7 @@ const Lesson: React.FC<LessonProps> = ({
         />
         <div style={{ width: "100%" }} />
         <Tooltip
-          content={lessonStatusMap[status].tooltip}
+          content={lessonStatusMap[status]?.tooltip ?? "Unknown status"}
           relationship="description"
           showDelay={1000}
         >
@@ -210,8 +219,8 @@ const Lesson: React.FC<LessonProps> = ({
             icon={
               <PresenceBadge
                 size="medium"
-                status={lessonStatusMap[status].icon ?? "unknown"}
-                outOfOffice={lessonStatusMap[status].outOfOffice}
+                status={lessonStatusMap[status]?.icon ?? "unknown"}
+                outOfOffice={lessonStatusMap[status]?.outOfOffice}
               />
             }
           />

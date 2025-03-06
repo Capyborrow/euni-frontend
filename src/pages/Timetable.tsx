@@ -1,208 +1,95 @@
+import { addDays, setHours, setMinutes, startOfWeek } from "date-fns";
 import Timetable from "../components/Timetable";
-import {
-  LessonStatusEnum,
-  AssignmentStatusEnum,
-  CommentStatusEnum,
-  LessonTypeEnum,
-} from "../types/Lesson";
+import { LessonType } from "../types/Lesson";
+import { useEffect, useMemo, useState } from "react";
+import { useDate } from "../hooks/useDate";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import useAuth from "../hooks/useAuth";
 
-const lessons = [
-  {
-    day: 0,
-    timeSlot: 0,
-    subject: "Mathematical logic",
-    teacherName: "Oleksandr Halavai",
-    room: "311",
-    type: LessonTypeEnum.Practice,
-    lessonStatus: LessonStatusEnum.Excused,
-    assignmentStatus: AssignmentStatusEnum.Graded,
-  },
-  {
-    day: 0,
-    timeSlot: 1,
-    subject: "Probability theory",
-    teacherName: "Vadym Ponomaryov",
-    link: "#",
-    type: LessonTypeEnum.Lecture,
-    lessonStatus: LessonStatusEnum.Skipped,
-    assignmentStatus: AssignmentStatusEnum.Overdue,
-    commentStatus: CommentStatusEnum.Unread,
-  },
-  {
-    day: 1,
-    timeSlot: 2,
-    subject: "Differential equations",
-    teacherName: "Volodymyr Pichkur",
-    room: "410",
-    type: LessonTypeEnum.Consultation,
-    lessonStatus: LessonStatusEnum.Current,
-    assignmentStatus: AssignmentStatusEnum.Submitted,
-    commentStatus: CommentStatusEnum.Unread,
-  },
-  {
-    day: 2,
-    timeSlot: 3,
-    subject: "Object-oriented programming",
-    teacherName: "Yaroslav Tereshchenko",
-    link: "#",
-    type: LessonTypeEnum.Practice,
-    lessonStatus: LessonStatusEnum.Unknown,
-    assignmentStatus: AssignmentStatusEnum.Expired,
-  },
-  {
-    day: 3,
-    timeSlot: 4,
-    subject: "English for professional use",
-    teacherName: "Oleksandr Kalenchenko",
-    link: "#",
-    type: LessonTypeEnum.Practice,
-    lessonStatus: LessonStatusEnum.Unknown,
-    assignmentStatus: AssignmentStatusEnum.Due,
-  },
-  {
-    day: 3,
-    timeSlot: 1,
-    subject: "Hello",
-    teacherName: "Oleksandr Kalenchenko",
-    link: "#",
-    type: LessonTypeEnum.Practice,
-    lessonStatus: LessonStatusEnum.Unknown,
-    assignmentStatus: AssignmentStatusEnum.Due,
-  },
-  {
-    day: 0,
-    timeSlot: 2,
-    subject: "Linear Algebra",
-    teacherName: "Iryna Koval",
-    room: "207",
-    type: LessonTypeEnum.Lecture,
-    lessonStatus: LessonStatusEnum.Attended,
-    assignmentStatus: AssignmentStatusEnum.Due,
-  },
-  {
-    day: 1,
-    timeSlot: 0,
-    subject: "Computer Networks",
-    teacherName: "Andriy Melnyk",
-    room: "502",
-    type: LessonTypeEnum.Practice,
-    lessonStatus: LessonStatusEnum.Skipped,
-    assignmentStatus: AssignmentStatusEnum.Overdue,
-  },
-  {
-    day: 1,
-    timeSlot: 3,
-    subject: "Databases",
-    teacherName: "Svitlana Holub",
-    room: "101",
-    type: LessonTypeEnum.Lecture,
-    lessonStatus: LessonStatusEnum.Cancelled,
-    assignmentStatus: AssignmentStatusEnum.Submitted,
-  },
-  {
-    day: 2,
-    timeSlot: 1,
-    subject: "Web Development",
-    teacherName: "Oleh Marchenko",
-    link: "#",
-    type: LessonTypeEnum.Practice,
-    lessonStatus: LessonStatusEnum.Attended,
-    assignmentStatus: AssignmentStatusEnum.Graded,
-  },
-  {
-    day: 2,
-    timeSlot: 4,
-    subject: "Discrete Mathematics",
-    teacherName: "Natalia Sokolova",
-    room: "309",
-    type: LessonTypeEnum.Lecture,
-    lessonStatus: LessonStatusEnum.Unknown,
-    assignmentStatus: AssignmentStatusEnum.Due,
-  },
-  {
-    day: 3,
-    timeSlot: 0,
-    subject: "Physics",
-    teacherName: "Volodymyr Hrytsenko",
-    room: "120",
-    type: LessonTypeEnum.Lecture,
-    lessonStatus: LessonStatusEnum.Attended,
-    assignmentStatus: AssignmentStatusEnum.Submitted,
-  },
-  {
-    day: 3,
-    timeSlot: 2,
-    subject: "Artificial Intelligence",
-    teacherName: "Kateryna Lys",
-    link: "#",
-    type: LessonTypeEnum.Practice,
-    lessonStatus: LessonStatusEnum.Skipped,
-    assignmentStatus: AssignmentStatusEnum.Expired,
-  },
-  {
-    day: 4,
-    timeSlot: 0,
-    subject: "Cybersecurity",
-    teacherName: "Ivan Bondarenko",
-    link: "#",
-    type: LessonTypeEnum.Lecture,
-    lessonStatus: LessonStatusEnum.Unknown,
-    assignmentStatus: AssignmentStatusEnum.Graded,
-    commentStatus: CommentStatusEnum.Unread,
-  },
-  {
-    day: 4,
-    timeSlot: 1,
-    subject: "Computer Graphics",
-    teacherName: "Olha Petrenko",
-    room: "215",
-    type: LessonTypeEnum.Practice,
-    lessonStatus: LessonStatusEnum.Attended,
-    assignmentStatus: AssignmentStatusEnum.Due,
-  },
-  {
-    day: 4,
-    timeSlot: 3,
-    subject: "Data Structures",
-    teacherName: "Pavlo Zhuk",
-    link: "#",
-    type: LessonTypeEnum.Consultation,
-    lessonStatus: LessonStatusEnum.Unknown,
-    assignmentStatus: AssignmentStatusEnum.Submitted,
-  },
-  {
-    day: 5,
-    timeSlot: 0,
-    subject: "Software Engineering",
-    teacherName: "Serhiy Hladkyi",
-    room: "412",
-    type: LessonTypeEnum.Lecture,
-    lessonStatus: LessonStatusEnum.Attended,
-    assignmentStatus: AssignmentStatusEnum.Overdue,
-  },
-  {
-    day: 5,
-    timeSlot: 2,
-    subject: "Game Development",
-    teacherName: "Mykhailo Kravets",
-    link: "#",
-    type: LessonTypeEnum.Practice,
-    lessonStatus: LessonStatusEnum.Skipped,
-    assignmentStatus: AssignmentStatusEnum.Due,
-  },
-  {
-    day: 5,
-    timeSlot: 4,
-    subject: "Embedded Systems",
-    teacherName: "Anton Bereza",
-    room: "303",
-    type: LessonTypeEnum.Lecture,
-    lessonStatus: LessonStatusEnum.Cancelled,
-    assignmentStatus: AssignmentStatusEnum.Submitted,
-  },
+const baseDate = new Date(1970, 0, 1);
+const timeSlots: [Date, Date][] = [
+  [
+    setHours(setMinutes(new Date(baseDate), 40), 8),
+    setHours(setMinutes(new Date(baseDate), 15), 10),
+  ],
+  [
+    setHours(setMinutes(new Date(baseDate), 35), 10),
+    setHours(setMinutes(new Date(baseDate), 10), 12),
+  ],
+  [
+    setHours(setMinutes(new Date(baseDate), 20), 12),
+    setHours(setMinutes(new Date(baseDate), 55), 13),
+  ],
+  [
+    setHours(setMinutes(new Date(baseDate), 5), 14),
+    setHours(setMinutes(new Date(baseDate), 40), 15),
+  ],
+  [
+    setHours(setMinutes(new Date(baseDate), 50), 15),
+    setHours(setMinutes(new Date(baseDate), 25), 17),
+  ],
+  [
+    setHours(setMinutes(new Date(baseDate), 35), 17),
+    setHours(setMinutes(new Date(baseDate), 20), 19),
+  ],
 ];
 
 const TimetablePage = () => {
-  return <Timetable lessons={lessons} />;
+  const { selectedDate } = useDate();
+  const { auth } = useAuth();
+  const axiosPrivate = useAxiosPrivate();
+  const startOfCurrentWeek = useMemo(
+    () => startOfWeek(selectedDate || new Date(), { weekStartsOn: 1 }),
+    [selectedDate]
+  );
+
+  const endOfCurrentWeek = useMemo(
+    () => addDays(startOfCurrentWeek, 5),
+    [startOfCurrentWeek]
+  ); // Saturday
+
+  // State for lessons
+  const [weekLessons, setWeekLessons] = useState<LessonType[]>([]);
+
+  // Fetch lessons
+  useEffect(() => {
+    const fetchLessons = async () => {
+      if (!auth?.id) return;
+
+      try {
+        const response = await axiosPrivate.get(
+          `/Timetable/student/${auth.id}`,
+          {
+            params: {
+              startDate: startOfCurrentWeek.toISOString(),
+              endDate: endOfCurrentWeek.toISOString(),
+            },
+          }
+        );
+
+        setWeekLessons(
+          response.data.map((lesson: LessonType) => ({
+            ...lesson,
+            date: lesson.date ? new Date(lesson.date) : new Date(),
+          }))
+        );
+        console.log("Fetched timetable:", response.data);
+      } catch (error) {
+        console.error("Error fetching timetable:", error);
+      }
+    };
+
+    fetchLessons();
+  }, [auth?.id, startOfCurrentWeek, endOfCurrentWeek, axiosPrivate]);
+
+  console.log("Week lessons:", weekLessons);
+
+  return (
+    <Timetable
+      lessons={weekLessons}
+      timeSlots={timeSlots}
+      startOfWeek={startOfCurrentWeek}
+    />
+  );
 };
 export default TimetablePage;

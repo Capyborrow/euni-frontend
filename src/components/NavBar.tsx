@@ -4,11 +4,11 @@ import {
   CalendarCheckmarkFilled,
   Search20Regular,
 } from "@fluentui/react-icons";
-import { Link } from "../components/Link";
+import { Link } from "./Link";
 import ROUTES from "../constants/routes";
-import UserMenu from "./auth/UserMenu";
-import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router";
+import useAuth from "../hooks/useAuth";
+import UserMenu from "./auth/UserMenu";
 
 const useStyles = makeStyles({
   root: {
@@ -29,9 +29,10 @@ const useStyles = makeStyles({
 
   inputContainer: {
     flex: 1,
+    gap: "1rem",
     display: "flex",
     alignItems: "center",
-    justifyContent: "start",
+    justifyContent: "space-between",
     padding: "0 .5rem",
   },
 
@@ -41,9 +42,9 @@ const useStyles = makeStyles({
   },
 });
 
-function TopNavBar() {
-  const { auth } = useAuth();
+function NavBar() {
   const navigate = useNavigate();
+  const { auth } = useAuth();
   const styles = useStyles();
   return (
     <div className={styles.root}>
@@ -63,9 +64,15 @@ function TopNavBar() {
           appearance="filled-darker"
         />
       </div>
+
       {auth?.accessToken ? (
         <>
-          <Button icon={<Alert32Regular />} appearance="subtle" size="large" />
+          <Button
+            icon={<Alert32Regular />}
+            appearance="subtle"
+            size="large"
+            shape="circular"
+          />
           <UserMenu />
         </>
       ) : (
@@ -81,4 +88,4 @@ function TopNavBar() {
   );
 }
 
-export default TopNavBar;
+export default NavBar;

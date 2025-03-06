@@ -29,6 +29,7 @@ function Home() {
       <Link to={ROUTES.CONFIRM_EMAIL}>Confirm email (auth)</Link>
       <Link to={ROUTES.CONFIRM_EMAIL_STATUS}>Confirm email (status)</Link>
       <Link to={ROUTES.TIMETABLE}>Timetable (student)</Link>
+      <Link to={ROUTES.TIMETABLE_MOCK}>Timetable mock (student)</Link>
       <Link to={ROUTES.DASHBOARD}>Dashboard (teacher)</Link>
       <Link to={ROUTES.UNAUTHORIZED}>Unauthorized (status)</Link>
       <Link to="/somenonexistingroute">Not found (status)</Link>
