@@ -1,3 +1,6 @@
+docker build --tag euni-frontend .
+docker run -p 5174:5174 euni-frontend
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
