@@ -1,4 +1,5 @@
 docker build --tag euni-frontend .
+
 docker run -p 5174:5174 euni-frontend
 
 # React + TypeScript + Vite
