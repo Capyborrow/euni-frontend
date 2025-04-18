@@ -1,10 +1,12 @@
 import { addDays, setHours, setMinutes, startOfWeek } from "date-fns";
-import Timetable from "../components/Timetable";
-import { LessonType } from "../types/Lesson";
-import { useEffect, useMemo, useState } from "react";
+import { LessonType } from "../types/lesson";
+import { useMemo } from "react";
 import { useDate } from "../hooks/useDate";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
+import Timetable from "../components/timetable/Timetable";
+
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const baseDate = new Date(1970, 0, 1);
 const timeSlots: [Date, Date][] = [
@@ -34,62 +36,85 @@ const timeSlots: [Date, Date][] = [
   ],
 ];
 
+const fetchTimetable = async (
+  axios: ReturnType<typeof useAxiosPrivate>,
+  studentId: string,
+  weekStart: Date,
+  weekEnd: Date
+) => {
+  const response = await axios.get(`/Timetable/student/${studentId}`, {
+    params: {
+      startDate: weekStart.toISOString(),
+      endDate: weekEnd.toISOString(),
+    },
+  });
+  return response.data.map((lesson: LessonType) => ({
+    ...lesson,
+    date: lesson.date ? new Date(lesson.date) : new Date(),
+  }));
+};
+
 const TimetablePage = () => {
   const { selectedDate } = useDate();
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
+  const queryClient = useQueryClient();
+
   const startOfCurrentWeek = useMemo(
     () => startOfWeek(selectedDate || new Date(), { weekStartsOn: 1 }),
     [selectedDate]
   );
-
   const endOfCurrentWeek = useMemo(
     () => addDays(startOfCurrentWeek, 5),
     [startOfCurrentWeek]
-  ); // Saturday
+  );
 
-  // State for lessons
-  const [weekLessons, setWeekLessons] = useState<LessonType[]>([]);
+  const queryKey = ["timetable", auth?.id, startOfCurrentWeek.toISOString()];
 
-  // Fetch lessons
-  useEffect(() => {
-    const fetchLessons = async () => {
-      if (!auth?.id) return;
+  const { data: currentWeekLessons = [] } = useQuery(
+    queryKey,
+    () =>
+      fetchTimetable(
+        axiosPrivate,
+        auth!.id,
+        startOfCurrentWeek,
+        endOfCurrentWeek
+      ),
+    { enabled: !!auth?.id }
+  );
 
-      try {
-        const response = await axiosPrivate.get(
-          `/Timetable/student/${auth.id}`,
-          {
-            params: {
-              startDate: startOfCurrentWeek.toISOString(),
-              endDate: endOfCurrentWeek.toISOString(),
-            },
-          }
-        );
+  useMemo(() => {
+    if (!auth?.id) return;
 
-        setWeekLessons(
-          response.data.map((lesson: LessonType) => ({
-            ...lesson,
-            date: lesson.date ? new Date(lesson.date) : new Date(),
-          }))
-        );
-        console.log("Fetched timetable:", response.data);
-      } catch (error) {
-        console.error("Error fetching timetable:", error);
-      }
-    };
+    const previousWeekStart = addDays(startOfCurrentWeek, -7);
+    const previousWeekEnd = addDays(endOfCurrentWeek, -7);
+    const nextWeekStart = addDays(startOfCurrentWeek, 7);
+    const nextWeekEnd = addDays(endOfCurrentWeek, 7);
 
-    fetchLessons();
-  }, [auth?.id, startOfCurrentWeek, endOfCurrentWeek, axiosPrivate]);
+    queryClient.prefetchQuery(
+      ["timetable", auth.id, previousWeekStart.toISOString()],
+      () =>
+        fetchTimetable(
+          axiosPrivate,
+          auth.id,
+          previousWeekStart,
+          previousWeekEnd
+        )
+    );
 
-  console.log("Week lessons:", weekLessons);
+    queryClient.prefetchQuery(
+      ["timetable", auth.id, nextWeekStart.toISOString()],
+      () => fetchTimetable(axiosPrivate, auth.id, nextWeekStart, nextWeekEnd)
+    );
+  }, [auth, startOfCurrentWeek, endOfCurrentWeek, axiosPrivate, queryClient]);
 
   return (
     <Timetable
-      lessons={weekLessons}
+      lessons={currentWeekLessons}
       timeSlots={timeSlots}
       startOfWeek={startOfCurrentWeek}
     />
   );
 };
+
 export default TimetablePage;
