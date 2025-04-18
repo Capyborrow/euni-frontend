@@ -4,7 +4,7 @@ import {
   CalendarCheckmarkFilled,
   Search20Regular,
 } from "@fluentui/react-icons";
-import { Link } from "./Link";
+import { Link } from "./enhanced/Link";
 import ROUTES from "../constants/routes";
 import { useNavigate } from "react-router";
 import useAuth from "../hooks/useAuth";

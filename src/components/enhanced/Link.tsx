@@ -12,7 +12,7 @@ import {
 
 type ReusableLinkProps = Omit<FluentLinkProps, "as"> &
   React.AnchorHTMLAttributes<HTMLAnchorElement> &
-  RouterLinkProps & {
+  Partial<RouterLinkProps> & {
     /**
      * When provided, renders a React Router Link.
      */

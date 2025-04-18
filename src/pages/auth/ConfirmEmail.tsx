@@ -1,4 +1,4 @@
-import { Link } from "../../components/Link";
+import { Link } from "../../components/enhanced/Link";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../../constants/routes";
 import { Caption1 } from "@fluentui/react-components";

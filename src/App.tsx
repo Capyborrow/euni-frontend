@@ -47,7 +47,9 @@ function App() {
                 <Route path={ROUTES.TIMETABLE} element={<Timetable />} />
               </Route>
             </Route>
-            <Route element={<ProtectedRoute allowedRoles={["student"]} />}>
+            <Route
+              element={<ProtectedRoute allowedRoles={["student", "any"]} />}
+            >
               <Route element={<DashboardLayout />}>
                 <Route
                   path={ROUTES.TIMETABLE_MOCK}

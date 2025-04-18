@@ -11,6 +11,8 @@ import {
   Theme,
 } from "@fluentui/react-components";
 
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 // You can pass your own custom tokens to a theme and pass that to the provider.
 type CustomTheme = Theme & {
   tokenA: string;
@@ -24,14 +26,18 @@ const customTheme: CustomTheme = {
   tokenC: "green",
 };
 
+const queryClient = new QueryClient();
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <FluentProvider theme={customTheme}>
-      <BrowserRouter>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </BrowserRouter>
-    </FluentProvider>
+    <QueryClientProvider client={queryClient}>
+      <FluentProvider theme={customTheme}>
+        <BrowserRouter>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </BrowserRouter>
+      </FluentProvider>
+    </QueryClientProvider>
   </StrictMode>
 );

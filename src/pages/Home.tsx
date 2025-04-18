@@ -1,4 +1,4 @@
-import { Link } from "../components/Link";
+import { Link } from "../components/enhanced/Link";
 import { makeStyles, tokens } from "@fluentui/react-components";
 import ROUTES from "../constants/routes";
 
